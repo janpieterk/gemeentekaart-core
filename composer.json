@@ -26,7 +26,8 @@
     "ext-json": "*",
     "ext-gd": "*",
     "ext-simplexml": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "ext-imagick": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
