@@ -10,14 +10,44 @@ Output formats are: SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
 
 ## Getting Started
 
+To install as a library, use this in your composer.json:
 ```json
 {
-  "require": {
-    "janpieterk/gemeentekaart-core": "*"
-  }
- }
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/janpieterk/gemeentekaart-core"
+        }
+    ],
+    "require": {
+    "janpieterk/gemeentekaart-core": "dev-master"
+    }
+}
 ```
-in composer.json.
+
+To install as a project in ```<DIRECTORYNAME>```, using composer:
+
+```$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev```
+
+## Basic usage
+
+To color the municipality areas of Amsterdam and Rotterdam with red and green,
+respectively, and create an SVG image:
+
+```php
+require('Kaart.class.php');
+
+$municipalities = array('g_0363' => '#FF0000', 'g_0599' => '#00FF00');
+
+$kaart = new Kaart('municipalities');
+$kaart->addData($municipalities);
+$kaart->show('svg');
+```
+
+The code numbers for the municipalities are the official Dutch municipality codes,
+available at [www.cbs.nl](https://www.cbs.nl), prefixed by ```g_``` so that they can be used
+as values of id attributes in HTML.
+
 
 ## API
 

@@ -8,18 +8,45 @@ Overige beschikbare data: de gemeentes van Vlaanderen (308 gemeentes), de veerti
 
 Kaarten kunnen gegenereerd worden als SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
 
-## Getting Started
+## Hoe te beginnen
 
+Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/) als een bibliotheek te installeren:
 ```json
 {
-  "require": {
-    "janpieterk/gemeentekaart-core": "*"
-  }
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/janpieterk/gemeentekaart-core"
+        }
+    ],
+    "require": {
+    "janpieterk/gemeentekaart-core": "dev-master"
+    }
 }
 ```
-in composer.json.
 
-##API
+Als een project installeren in ```<DIRECTORYNAME>``` met composer:
+
+```$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev```
+
+## Een simpel voorbeeld
+
+Om de gemeentes Amsterdam en Rotterdam respectievelijk rood en groen te kleuren en een SVG-kaart te produceren:
+
+```php
+require('Kaart.class.php');
+
+$municipalities = array('g_0363' => '#FF0000', 'g_0599' => '#00FF00');
+
+$kaart = new Kaart('municipalities');
+$kaart->addData($municipalities);
+$kaart->show('svg');
+```
+
+Gebruikte codes zijn de officiële Nederlandse gemeentecoces, 
+te verkrijgen bij [www.cbs.nl](https://www.cbs.nl), voorafgegaan door ```g_``` zo dat ze als waardes van id attributen in HTML gebruikt kunnen worden.
+
+## API
 
 #### ```__construct(string $type = 'municipalities')```
 Default kaarttype is ```municipalities```. Mogelijke kaarttypes zijn: ```'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'```. ```municipalities``` is een synoniem van ```gemeentes```. ```provincies``` is een synoniem van ```provinces```.
