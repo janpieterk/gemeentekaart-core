@@ -440,8 +440,8 @@ class KaartTest extends TestCase
         $reference_image = KAART_REFERENCE_IMAGES_DIR . '/' . $filename;
         $this->kaart->setTitle('dit is een testtitel');
         $this->saveFile($filename, $this->kaart->fetch('png'));
-        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image, 5);
-        $this->assertEquals(0, $result, "check file $filename");
+        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image);
+        $this->assertLessThan(0.005, $result, "check file $filename");
     }
 
 
