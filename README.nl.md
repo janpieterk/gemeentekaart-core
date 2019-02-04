@@ -234,7 +234,7 @@ Geeft de kaart aan een web browser om verder af te handelen. Afhankelijk van de 
 
 ---
 #### ```string|blob fetch(string $format = 'svg')```
-Geeft de kaart terug als een sting (SVG, JSON, KML) of als een binaire blob (bitmapafbeelding). Zie ```show()``` voor mogelijke formats. 
+Geeft de kaart terug als een string (SVG, JSON, KML) of als een binaire blob (bitmapafbeelding). Zie ```show()``` voor mogelijke formats. 
 
 ---
 #### ```bool saveAsFile(string $filename, string $format = 'svg')```
