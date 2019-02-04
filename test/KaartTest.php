@@ -88,14 +88,25 @@ class KaartTest extends TestCase
     /**
      * @param $image1
      * @param $image2
+     * @param int $fuzzfactor
      * @return mixed
      * @throws \ImagickException
      */
-    private function compareTwoImages($image1, $image2)
+    private function compareTwoImages($actual, $expected, $fuzzfactor = 0)
     {
-        $image1 = new imagick($image1);
-        $image2 = new imagick($image2);
-        $result = $image1->compareImages($image2, imagick::METRIC_MEANABSOLUTEERROR);
+        if ($fuzzfactor === 0) {
+            $image1 = new imagick($actual);
+            $image2 = new imagick($expected);
+            $result = $image1->compareImages($image2, imagick::METRIC_MEANABSOLUTEERROR);
+        } else {
+            // see http://nl1.php.net/manual/en/imagick.compareimages.php + comments
+            $image1 = new imagick();
+            $image2 = new imagick();
+            $image1->SetOption('fuzz',  $fuzzfactor . '%');
+            $image1->readImage($actual);
+            $image2->readImage($expected);
+            $result = $image1->compareImages($image2, 1);
+        }
         return $result[1];
     }
 
@@ -141,7 +152,7 @@ class KaartTest extends TestCase
         $filename = substr(__FUNCTION__, 4) . '.jpg';
         $reference_image = KAART_REFERENCE_IMAGES_DIR . '/' . $filename;
         $this->saveFile($filename, $this->kaart->fetch('jpeg'));
-        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image);
+        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image, 15);
         $this->assertEquals(0, $result, "check file $filename");
     }
 
@@ -429,7 +440,7 @@ class KaartTest extends TestCase
         $reference_image = KAART_REFERENCE_IMAGES_DIR . '/' . $filename;
         $this->kaart->setTitle('dit is een testtitel');
         $this->saveFile($filename, $this->kaart->fetch('png'));
-        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image);
+        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image, 5);
         $this->assertEquals(0, $result, "check file $filename");
     }
 

@@ -20,4 +20,4 @@
 //  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 define('KAART_TESTDIRECTORY', __DIR__ . '/tmp');
-define('KAART_REFERENCE_IMAGES_DIR', __DIR__ . '/reference_imaages');
+define('KAART_REFERENCE_IMAGES_DIR', __DIR__ . '/reference_images');
