@@ -35,8 +35,6 @@ To color the municipality areas of Amsterdam and Rotterdam with red and green,
 respectively, and create an SVG image:
 
 ```php
-require('Kaart.class.php');
-
 $municipalities = array('g_0363' => '#FF0000', 'g_0599' => '#00FF00');
 
 $kaart = new Kaart('municipalities');

@@ -34,8 +34,6 @@ Als een project installeren in ```<DIRECTORYNAME>``` met composer:
 Om de gemeentes Amsterdam en Rotterdam respectievelijk rood en groen te kleuren en een SVG-kaart te produceren:
 
 ```php
-require('Kaart.class.php');
-
 $municipalities = array('g_0363' => '#FF0000', 'g_0599' => '#00FF00');
 
 $kaart = new Kaart('municipalities');
