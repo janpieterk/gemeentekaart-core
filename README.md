@@ -2,7 +2,7 @@
 Deze documentatie in het [Nederlands](README.nl.md).
 ___
 
-PHP library to create choropleth map of the municipalities of the Netherlands (borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
+PHP library to create choropleth maps of the municipalities of the Netherlands (borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
 
 Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders. 
 
