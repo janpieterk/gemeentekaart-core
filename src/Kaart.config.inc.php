@@ -20,15 +20,6 @@
 //  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 /**
- * Central configuration file
- *
- * @author    Jan Pieter Kunst <jan.pieter.kunst@meertens.knaw.nl>
- * @copyright 2006-2007 Meertens Instituut / KNAW
- * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GNU GPL version 2
- * @package   Kaart
- */
-
-/**
  * Include directory for database connection details
  *
  * This should be a path outside the web server's document root
