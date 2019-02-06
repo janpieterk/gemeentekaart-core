@@ -86,8 +86,8 @@ class KaartTest extends TestCase
     }
 
     /**
-     * @param $image1
-     * @param $image2
+     * @param $actual
+     * @param $expected
      * @param int $fuzzfactor
      * @return mixed
      * @throws \ImagickException
