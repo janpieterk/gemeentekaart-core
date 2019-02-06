@@ -283,6 +283,6 @@ print_r($formats);
 
 ## Dankwoord
 
-* Deze bibliotheek is een afgeleide van de Meertens Kaartmodule.
+* Deze bibliotheek is een afgeleide van de [Meertens Kaartmodule](http://www.meertens.knaw.nl/kaart/downloads.html).
 * Deze bibliotheen bevat licht aangepaste versies van de PEAR packages Image_Color en XML_SVG.
 * Deze bibliotheek is opgedragen aan Ilse van Gemert (1979-2018).
