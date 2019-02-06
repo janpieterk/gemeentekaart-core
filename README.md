@@ -286,6 +286,6 @@ print_r($formats);
 
 ## Acknowledgments
 
-* This library is a derivative work of the code from the Meertens Kaart module.
+* This library is a derivative work of the code from the [Meertens Kaart module](http://www.meertens.knaw.nl/kaart/downloads.html).
 * This library incorporates slightly modified versions of the PEAR packages Image_Color and XML_SVG.
 * This library is dedicated to Ilse van Gemert (1979-2018).
