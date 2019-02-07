@@ -21,6 +21,7 @@
 
 
 namespace JanPieterK\GemeenteKaart\REST;
+
 use JanPieterK\GemeenteKaart\Kaart;
 
 class RequestParser
@@ -63,9 +64,20 @@ class RequestParser
 
         if (!empty($this->raw_request_array)) {
             // no map creation requested, map type implicit, so no need to check map parameters
-            if (isset($this->raw_request_array['possiblemunicipalities']) && (!isset($this->raw_request_array['type']))
+            if (!isset($this->raw_request_array['type'])
+                && (isset($this->raw_request_array['possiblemunicipalities'])
+                    || isset($this->raw_request_array['possibletypes'])
+                    || isset($this->raw_request_array['possibleformats']))
             ) {
-                $this->checkBooleanTrue('possiblemunicipalities');
+
+                if (isset($this->raw_request_array['possiblemunicipalities'])) {
+                    $this->checkBooleanTrue('possiblemunicipalities');
+                } elseif (isset($this->raw_request_array['possibletypes'])) {
+                    $this->checkBooleanTrue('possibletypes');
+                } elseif (isset($this->raw_request_array['possibleformats'])) {
+                    $this->checkBooleanTrue('possibleformats');
+                }
+
             } else {
                 $this->checkParameter('type');
                 $this->checkParameter('format');
@@ -124,9 +136,9 @@ class RequestParser
                     $this->parameters['format'] = 'png';
                 } elseif (!in_array($this->raw_request_array['format'], $this->allowed_formats)) {
                     $this->errors[] = 'Parameter format ' . $this->raw_request_array['format'] . ' not one of ' . join(
-                        ', ',
-                        $this->allowed_formats
-                    );
+                            ', ',
+                            $this->allowed_formats
+                        );
                 } else {
                     $this->parameters['format'] = $this->raw_request_array['format'];
                 }
