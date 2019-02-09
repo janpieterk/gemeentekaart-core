@@ -305,11 +305,11 @@ class SVG extends Image
         if ($map_definitions['map_settings']['basemap_interactive']) {
             // if the path is a municipality, the id is of the form 'g_[numerical code]'
             if (!empty($tooltip) && strpos($path_id, 'g_') === 0) {
-                $svgpath->setParam('onmouseover', "ShowTooltip('" . $this->escapeJSString($tooltip) . "')");
+                $svgpath->setParam('onmouseover', "ShowTooltip('" . Kaart::escapeJSString($tooltip) . "')");
                 $svgpath->setParam('onmouseout', 'HideTooltip()');
             } elseif ($this->interactive && /*strpos($path_id, 'g_') === 0*/
                 !is_null($name)) {
-                $svgpath->setParam('onmouseover', "ShowTooltip('" . $this->escapeJSString($name) . "')");
+                $svgpath->setParam('onmouseover', "ShowTooltip('" . Kaart::escapeJSString($name) . "')");
                 $svgpath->setParam('onmouseout', 'HideTooltip()');
             }
         }

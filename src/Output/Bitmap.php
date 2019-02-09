@@ -579,7 +579,7 @@ class Bitmap extends Image
         $title_fontsize = ($this->svg_title_fontsize * $this->fontsize_factor) / $this->bitmap_factor;
 
         // Trick to center text within picture
-        // see http://nl3.php.net/manual/en/function.imageftbbox.php 
+        // see http://nl3.php.net/manual/en/function.imageftbbox.php
         $details = imageftbbox($title_fontsize, 0, KAART_BITMAP_TITLEFONT, $this->title);
         $title_x = ($width - $details[4]) / 2;
         $title_y = round($height / $this->title_y_factor);

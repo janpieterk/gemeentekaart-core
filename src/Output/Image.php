@@ -89,19 +89,6 @@ abstract class Image
     }
 
     /**
-     * Escape string for use as argument for Javascript function
-     *
-     * @param string string to be escaped
-     *
-     * @return string escaped string
-     */
-    protected function escapeJSString($string)
-    {
-        return addslashes($string);
-    }
-
-
-    /**
      * Draws the basemap, depending on which parts are requested
      *
      * @param $map_definitions

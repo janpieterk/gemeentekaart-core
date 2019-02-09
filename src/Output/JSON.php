@@ -114,16 +114,16 @@ class JSON extends Image
 
         if (!empty($this->link)) {
             if (!$this->linkhighlightedonly || ($this->linkhighlightedonly && $highlightedpath)) {
-                $feature['properties']['href'] = $this->escapeJSString(sprintf($this->link, $path_id));
+                $feature['properties']['href'] = Kaart::escapeJSString(sprintf($this->link, $path_id));
                 if (!empty($this->target)) {
-                    $feature['target'] = $this->escapeJSString($this->target);
+                    $feature['target'] = Kaart::escapeJSString($this->target);
                 }
             }
         }
 
         if (array_key_exists($path_id, $links)) {
             foreach ($links[$path_id] as $key => $value) {
-                $feature['properties'][$key] = $this->escapeJSString($value);
+                $feature['properties'][$key] = Kaart::escapeJSString($value);
             }
         }
 

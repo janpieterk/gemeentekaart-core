@@ -249,12 +249,22 @@ class Kaart
      * Escape string for use as value of XML attribute
      *
      * @param string string to be escaped
-     *
      * @return string escaped string
      */
     public static function escapeXMLString($string)
     {
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
+    }
+
+    /**
+     * Escape string with Javascript code for use in HTML
+     *
+     * @param $string
+     * @return string
+     */
+    public static function escapeJSString($string)
+    {
+        return addslashes($string);
     }
 
     /**
