@@ -29,55 +29,40 @@ use JanPieterK\GemeenteKaart\Kaart;
 class Bitmap extends Image
 {
     /**
-     * @var resource GD image resource voor bitmapversie van de kaart
+     * @var resource GD image resource for bitmap version of the map
      */
     public $gd_image;
     /**
-     * @var float de dikte van de dunste lijnen in de bitmap (afhankelijk van de grootte)
+     * @var float thickness of the thinnest line (depends on size) )
      */
     private $bitmap_linewidth;
     /**
-     * @var bool boolean die aangeeft of er een <map> met de plaatsnamen in "title" attributen gemaakt moet worden
+     * @var bool should <area> elements with area names be created
      */
     private $interactive = false;
     /**
-     * @var string HTML met de <area> elementen voor de afgebeelde plaatsen, om in <map> op te nemen
+     * @var string HTML with <area> elements, for use in <map> element
      */
     private $imagemap_areas = '';
     /**
-     * @var int factor waarmee Rijksdriehoeksstelsel-coordinaten, of andere op dezelfde fijnmazigheid
-     *         gebaseerde SVG-coordinaten, naar pixel-coordinaten worden omgezet. Afhankelijk van de grootte
-     *         van de kaart.
+     * @var int factor to convert Rijkdriehoekscoördinaten or SVG-coordinates into pixel coordinates. Depends on the
+     * size of the map.
      */
     private $bitmap_factor;
     /**
-     * @var int de legenda begint op 1/20ste van de bovenkant van het plaatje (als er geen titel is)
+     * @var int map should be shifted downward if there is a title
      */
-    private $legend_symbol_y_factor = 20;
+    private $map_downward_factor = 20;
     /**
-     * @var int de legenda begint op 1/15de van de zijkant van het plaatje
-     */
-    private $legend_symbol_x_factor = 15;
-    /**
-     * @var float hulpgetal om de x-coordinaat van de legendatekst uit de fontgrootte af te leiden
-     */
-    private $legend_text_x_factor = 1.5;
-    /**
-     * @var float hulpgetal om de initi�le y-coordinaat van de legendatekst uit de fontgrootte af te leiden
-     */
-    private $legend_text_y_factor = 0.5;
-    /**
-     * @var int aantal pixels dat bij de y-coordinaten opgeteld moet worden als de
-     *         titel boven de kaart staat
+     * @var int number of pixels to be added to the y-coordinates if there is a title
      */
     private $extra_pixels = 0;
     /**
-     * @var int hulpgetal om $this->extra_pixels uit te rekenen
+     * @var int help factor to calculate $this->extra_pixels
      */
     private $extra_pixels_factor = 9;
     /**
-     * @var int hulpgetal om de fontgrootte in GD-termen af te leiden uit de fontgrootte
-     *         zoals uitgedrukt in SVG-fontgrootte in Rijksdriehoeksfijnmazigheid
+     * @var int help factor to calculate GD-fontsize from SVG or Rijksdriehoeksfontsize
      */
     private $fontsize_factor;
     /**
@@ -85,55 +70,32 @@ class Bitmap extends Image
      */
     private $title_y_factor;
     /**
-     * @var array array met kleuren die standaard gealloceerd moeten worden
+     * @var array array with colors which should be allocated by default
      */
     private $default_colors = array('blue', 'brown', 'yellow', 'green', 'red', 'black', 'gray', 'dodgerblue');
     /**
-     * @var array array voor de integers van de gealloceerde kleuren
+     * @var array array for integers of the allocated colors
      */
     private $colors = array();
     /**
-     * @var int fontgrootte in Rijksdriehoeksfijnmazigheid voor de titel
+     * @var int fontsize in Rijksdriehoeks-resolution
      */
     private $svg_title_fontsize;
     /**
-     * @var float hulpgetal om de fontgrootte voor de titel mee uit te rekenen
+     * @var float help factor to calculate font size for the title
      */
     private $svg_title_fontsize_factor = 1.5;
     /**
-     * @var int fontgrootte in GD-termen voor de legenda
-     */
-    private $fontsize;
-    /**
-     * @var int x-coordinaat voor het legendasymbool
-     */
-    private $legend_symbol_x;
-    /**
-     * @var int y-coordinaat voor het legendasymbool
-     */
-    private $legend_symbol_y;
-    /**
-     * @var int x-coordinaat voor de legendatekst
-     */
-    private $legend_text_x;
-    /**
-     * @var int y-coordinaat voor de legendatekst
-     */
-    private $legend_text_y;
-    /**
-     * @var int needed for conversion of rd-coordinates to pixels
+     * @var int needed for conversion of Rijksdriehoeks-coordinates to pixels
      */
     private $rd2pixel_x;
     /**
-     * @var int needed for conversion of rd-coordinates to pixels
+     * @var int needed for conversion of Rijksdriehoeks-coordinates to pixels
      */
     private $rd2pixel_y;
 
     /**
-     * De constructor
-     *
-     * Maakt de grondkaart als GD image resource
-     *   *
+     * Creates the baseamp as GD resource
      *
      * @param $parameters
      */
@@ -169,40 +131,32 @@ class Bitmap extends Image
         $this->fontsize_factor = $map_definitions['map_settings']['bitmap_fontsize_factor'];
         $this->title_y_factor = $map_definitions['map_settings']['bitmap_title_y_factor'];
 
-        $this->legend_symbol_x = round($width / $this->legend_symbol_x_factor);
-        $this->legend_symbol_y = round($height / $this->legend_symbol_y_factor);
-
         if (!empty($this->title)) {
-            // kaart iets kleiner
+            // map somewhat smaller
             $bitmap_size_factor += ($bitmap_size_factor / $smaller_bitmap_factor);
-            // en naar beneden geschoven
-            $this->extra_pixels = round($height / $this->extra_pixels_factor) - $this->legend_symbol_y;
-            $this->legend_symbol_y += $this->extra_pixels;
+            // and shifted downward
+            $this->extra_pixels = round($height / $this->extra_pixels_factor)
+                - round($height / $this->map_downward_factor);
         }
 
         $this->bitmap_linewidth = $width / $bitmap_size_factor;
         $this->bitmap_factor = round($bitmap_size_factor / $this->bitmap_linewidth);
         $this->svg_title_fontsize = $fontsize * $this->svg_title_fontsize_factor;
-        $this->fontsize = ($fontsize * $this->fontsize_factor) / $this->bitmap_factor;
-
-        $this->legend_text_x = $this->legend_symbol_x + ($this->fontsize * $this->legend_text_x_factor);
-        $this->legend_text_y = $this->legend_symbol_y + ($this->fontsize * $this->legend_text_y_factor);
 
         $this->gd_image = imagecreate($width, $height);
-        // achtergroundkleur = eerste gealloceerde kleur
+        // backgroundcolor = first allocated color
         $this->colors[$map_definitions['map_settings']['background_color']] = \Image_Color::allocateColor(
             $this->gd_image,
             $map_definitions['map_settings']['background_color']
         );
 
-
-        // om symbolen zonder fill te maken
+        // for empty fills
         $this->colors['none'] = false;
 
         foreach ($this->default_colors as $color) {
             $this->colors[$color] = \Image_Color::allocateColor($this->gd_image, $color);
         }
-        $this->colors['grey'] = $this->colors['gray']; // Image_Color gebruikt spelling 'gray'
+        $this->colors['grey'] = $this->colors['gray']; // Image_Color uses the spelling 'gray'
 
         if ($map_definitions['map_settings']['bitmap_outline']) {
             imagerectangle($this->gd_image, 0, 0, $width - 1, $height - 1, $this->colors['black']);
@@ -213,7 +167,7 @@ class Bitmap extends Image
     }
 
     /**
-     * Voegt een <area> element toe aan $this->imagemap_areas om later in een <map> element te stoppen
+     * Adds <area> element to $this->imagemap_areas
      *
      * @param string $shape circle, rectangle or polygon
      * @param array $coords in pixels
@@ -318,11 +272,8 @@ class Bitmap extends Image
     }
 
     /**
-     * Korte omschrijving
+     * Creates actual HTML for <area> element
      *
-     * lange omschrijving
-     *
-     * @tags
      * @param $shape
      * @param $coords
      * @param $default_title
@@ -395,28 +346,28 @@ class Bitmap extends Image
     }
 
     /**
-     * Vertaalt rijksdriehoeksco�rdinaten naar GD-co�rdinaten in pixels
+     * Vertaalt Rijksdriehoeks-coordinates to GD-coordinates in pixels
      *
-     * @param $coordinates array x- en y-coordinaat (passed by reference)
+     * @param $coordinates array
      */
     private function rd2pixels(&$coordinates)
     {
         foreach ($coordinates as $key => $coordinate) {
-            if ($key % 2 == 0) { // even: x-coordinaat
+            if ($key % 2 == 0) { // even: x-coordinate
                 $coordinates[$key] = round(($coordinate + $this->rd2pixel_x) / $this->bitmap_factor);
-            } else { // oneven: y-coordinaat
+            } else { // odd: y-coordinate
                 $coordinates[$key]
                     = round(-(($coordinate - $this->rd2pixel_y) / $this->bitmap_factor)) + $this->extra_pixels;
-            } // $this->extra_pixels == 0 als er geen titel boven de kaart staat
+            } // $this->extra_pixels == 0 when no title above the map
         }
     }
 
     /**
-     * Emulatie van het SVG-element <path> door achter elkaar getekende lijnstukken
+     * Emulation of SVG <path> element
      *
-     * @param $gd_image    resource GD image resource (passed by reference)
-     * @param $coordinates array met coordinaten
-     * @param $color       int GD-allocated kleur
+     * @param $gd_image resource
+     * @param $coordinates array
+     * @param $color int GD-allocated color
      */
     private function imagepath(&$gd_image, $coordinates, $color)
     {
@@ -432,13 +383,11 @@ class Bitmap extends Image
     }
 
     /**
-     * Geeft op grond van de naam van een kleur de GD-allocated integer terug
+     * Returns GD-allocated color from color name
      *
-     * @access private
+     * @param $string string
      *
-     * @param $string string: naam van de kleur
-     *
-     * @return mixed integer (int GD-allocated kleur) of FALSE indien niet bestaand
+     * @return mixed integer (int GD-allocated color) or FALSE if not existing
      */
     private function allocatedColor($string)
     {
@@ -616,9 +565,8 @@ class Bitmap extends Image
     }
 
     /**
-     * Tekent de titel boven de kaart
+     * Draws the title above the map
      *
-     * @access private
      * @param $width
      * @param $height
      */
@@ -630,8 +578,8 @@ class Bitmap extends Image
 
         $title_fontsize = ($this->svg_title_fontsize * $this->fontsize_factor) / $this->bitmap_factor;
 
-        // Truuk om text te centreren binnen plaatje
-        // van http://nl3.php.net/manual/en/function.imageftbbox.php gehaald
+        // Trick to center text within picture
+        // see http://nl3.php.net/manual/en/function.imageftbbox.php 
         $details = imageftbbox($title_fontsize, 0, KAART_BITMAP_TITLEFONT, $this->title);
         $title_x = ($width - $details[4]) / 2;
         $title_y = round($height / $this->title_y_factor);
