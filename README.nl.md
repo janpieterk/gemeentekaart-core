@@ -281,8 +281,12 @@ print_r($formats);
 // )
 ```
 
+## Bibliografie
+J. Daan en D.P. Blok (1969). _Van randstad tot landrand. Toelichting bij de kaart: dialecten en naamkunde. Bijdragen en mededelingen der Dialectencommissie van de Koninklijke Nederlandse Akademie van Wetenschappen te Amsterdam 37_, Amsterdam, N.V. Noord-Hollandsche uitgevers maatschappij.
+
 ## Dankwoord
 
 * Deze bibliotheek is een afgeleide van de [Meertens Kaartmodule](http://www.meertens.knaw.nl/kaart/downloads.html).
 * Deze bibliotheen bevat licht aangepaste versies van de PEAR packages Image_Color en XML_SVG.
 * Deze bibliotheek is opgedragen aan Ilse van Gemert (1979-2018).
+

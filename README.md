@@ -283,6 +283,9 @@ print_r($formats);
 //     [6] => json
 // )
 ```
+---
+## References
+J. Daan and D.P. Blok (1969). _Van randstad tot landrand. Toelichting bij de kaart: dialecten en naamkunde. Bijdragen en mededelingen der Dialectencommissie van de Koninklijke Nederlandse Akademie van Wetenschappen te Amsterdam 37_, Amsterdam, N.V. Noord-Hollandsche uitgevers maatschappij.
 
 ## Acknowledgments
 
