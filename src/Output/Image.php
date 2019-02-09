@@ -29,6 +29,8 @@ use JanPieterK\GemeenteKaart\Kaart;
  * http://stackoverflow.com/questions/10277317/abstract-class-children-type
  * Multiple Inheritance vs. Composition
  * http://propelorm.org/blog/2011/03/03/don-t-copy-code-oh-and-inheritance-and-composition-are-bad-too.html
+ * 
+ * @method drawPath($path_id, $data, $path_type, $map_definitions, $highlighted, $links, $tooltips)
  */
 abstract class Image
 {
@@ -62,15 +64,6 @@ abstract class Image
      */
     protected $map_copyright_strings = array();
 
-    abstract protected function drawPath(
-        $path_id,
-        $coords,
-        $path_type,
-        $map_definitions,
-        $highlighted,
-        $links,
-        $tooltips
-    );
 
     public function __construct($parameters)
     {
@@ -89,7 +82,7 @@ abstract class Image
     }
 
     /**
-     * Draws the basemap, depending on which parts are requested
+     * Draws the basemap
      *
      * @param $map_definitions
      * @param $highlighted
@@ -113,22 +106,18 @@ abstract class Image
                     $map_lines[$path_id] = $map_lines_higlighted[$path_id];
                 }
             }
-            $this->drawPaths($map_lines, $map_definitions, $highlighted, $links, $tooltips);
-        }
-    }
+            foreach ($map_lines as $path_id => $data) {
+                $this->drawPath(
+                    $path_id,
+                    $data,
+                    $data['path_type'],
+                    $map_definitions,
+                    $highlighted,
+                    $links,
+                    $tooltips
+                );
+            }
 
-    private function drawPaths($map_lines, $map_definitions, $highlighted, $links, $tooltips)
-    {
-        foreach ($map_lines as $path_id => $data) {
-            $this->drawPath(
-                $path_id,
-                $data,
-                $data['path_type'],
-                $map_definitions,
-                $highlighted,
-                $links,
-                $tooltips
-            );
         }
     }
 }

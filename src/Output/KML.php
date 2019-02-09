@@ -469,9 +469,4 @@ class KML extends Image
             $this->dom->appendChild($this->dom->createComment($string));
         }
     }
-
-    // @todo kijken of dit niet beter kan
-    protected function drawPath($path_id, $coords, $path_type, $map_definitions, $highlighted, $links, $tooltips)
-    {
-    }
 }
