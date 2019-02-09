@@ -465,7 +465,7 @@ class Kaart
     }
 
     /**
-     * For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<imagemap>`
+     * For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<map>`
      * HTML element. Can only be called **after** generating a map with
      * the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated.
      *

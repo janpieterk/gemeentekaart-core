@@ -223,7 +223,7 @@ Geeft de titel van de kaart terug. Een lege string als er geen titel gezet is.
 
 ---
 #### `string getImagemap()`
-Alleen voor bitmapkaarten: geeft een string met `<area>` elementen van onderdelen van de kaart terug, om in een `<imagemap>` HTML element te gebruiken. Kan alleen aangeroepen worden **na** het genereren van een kaart met de `show()`, `fetch()` of `saveAsFile()` methodes! 
+Alleen voor bitmapkaarten: geeft een string met `<area>` elementen van onderdelen van de kaart terug, om in een `<map>` HTML element te gebruiken. Kan alleen aangeroepen worden **na** het genereren van een kaart met de `show()`, `fetch()` of `saveAsFile()` methodes! 
 
 ---
 #### `array getPossibleAreas()`

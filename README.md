@@ -225,7 +225,7 @@ Returns the title of the map. Empty string if no title has been set.
 
 ---
 #### `string | boolean getImagemap()`
-For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<imagemap>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated. 
+For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<map>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated. 
 
 ---
 #### `array getPossibleAreas()`
