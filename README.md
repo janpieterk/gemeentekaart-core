@@ -29,6 +29,10 @@ To install as a project in `<DIRECTORYNAME>`, using composer:
 
 `$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
 
+Running the PHPUnit tests for gemeentekaart-core:
+
+* Run the shell script `test/run_tests.sh`.
+
 ## Basic usage
 
 To color the municipality areas of Amsterdam and Rotterdam with red and green,

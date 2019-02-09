@@ -29,6 +29,11 @@ Als een project installeren in `<DIRECTORYNAME>` met composer:
 
 `$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
 
+De PHPUnit tests van gemeentekaart-core laten lopen:
+
+* Start het shellscript `test/run_tests.sh`.
+
+
 ## Een simpel voorbeeld
 
 Om de gemeentes Amsterdam en Rotterdam respectievelijk rood en groen te kleuren en een SVG-kaart te produceren:
