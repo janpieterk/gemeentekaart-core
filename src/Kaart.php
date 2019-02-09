@@ -35,11 +35,11 @@ class Kaart
 {
 
     /**
-     * @var bool whether placename + Kloeke-code should be displayed 'onmouseover' on placemarks
+     * @var bool whether area name should be displayed 'onmouseover' on areas
      */
     private $interactive = false;
     /**
-     * @var string with %s placeholder which will be replaced with municipality code
+     * @var string with %s placeholder which will be replaced with area code
      */
     private $link = '';
     /**
@@ -75,7 +75,7 @@ class Kaart
      */
     private $json;
     /**
-     * @var array with links for (a subset of) the municipalities (municipality codes are keys, href values are values).
+     * @var array with links for (a subset of) the areas (areas codes are keys, href values are values).
      * Optional key: 'target'
      */
     private $links = array();
@@ -104,21 +104,13 @@ class Kaart
      */
     private $target = '';
     /**
-     * @var boolean whether the general link above, if set, applies to all municipalities or only highlighted ones
+     * @var boolean whether the general link above, if set, applies to all areas or only highlighted ones
      */
     private $linkhighlightedonly = false;
-    /**
-     * @var array list with extra background layers
-     */
-    private $backgrounds = array();
     /**
      * @var int width of the map in pixels
      */
     private $width;
-    /**
-     * @var array list of parts of the basemap which should be drawn. If empty, draw complete basemap
-     */
-    private $parts = array();
     /**
      * @var array with tooltips for municipalities (municipality codes are keys, tooltip texts are values)
      */
@@ -148,7 +140,6 @@ class Kaart
      * The constructor.
      *
      * @param string $type
-     * @param null|string $paths_file
      */
     public function __construct($type = 'municipalities')
     {
@@ -189,14 +180,14 @@ class Kaart
     }
 
     /**
-     * Vertaalt Rijksdriehoekscoördinaten naar noorderbreedte/oosterlengte
+     * Translates 'Rijksdriehoekscoördinaten' into WGS84 latitude/longitude
      *
-     * Gebaseerd op Javascript van Ed Stevenhagen en Frank Kissels ({@link http://www.xs4all.nl/~estevenh/})
+     * Based on Javascript from Ed Stevenhagen and Frank Kissels http://www.xs4all.nl/~estevenh/ (dead link)
      *
      * @param $rd_x float x-coördinaat (RD)
      * @param $rd_y float y-coördinaat (RD)
      *
-     * @return array array met noorderbreedte en oosterlengte
+     * @return array array with latitude/longitude
      */
     public static function rd2latlong($rd_x, $rd_y)
     {
@@ -267,8 +258,10 @@ class Kaart
     }
 
     /**
+     * Translates colors to either HTML or KML values
+     *
      * @param $highlighted array contaiing areas to be highlighted (area codes are keys, colors are values)
-     * @param $format      string with color (name or code)
+     * @param $format string with color (name or code)
      *
      * @return array with the colors translated to hexadecimal color codes, either HTML or Google Earth
      */
@@ -312,6 +305,8 @@ class Kaart
     }
 
     /**
+     * Conflates the three 'bitmap' types into 'bitmap'
+     *
      * @param $format
      *
      * @return string
@@ -329,11 +324,11 @@ class Kaart
     }
 
     /**
-     * Returns the map as string or binary stream
+     * Returns the map as a string (SVG, JSON, KML) or binary blob (bitmap image). See `show()` for possible formats.
      *
      * @param string string indicating format of the map (svg, png, gif, jpeg, kml, json)
      *
-     * @return string document containing the map
+     * @return string|resource document containing the map
      */
     public function fetch($format = 'svg')
     {
@@ -378,9 +373,9 @@ class Kaart
     }
 
     /**
-     * Hands the map over to a web browser for further handling. Depending on the capabilities and
-     * setting of the browser, the map will be embedded on the page, handed to another application, or
-     * downloaded.
+     * Hands the map over to a web browser for further handling. Depending on the capabilities and settings of the
+     * browser, the map will be shown on a page, handed to another application, or downloaded.
+     * Possible formats are: 'svg', 'png', 'gif','jpeg', 'jpg', 'kml', 'json'.
      *
      * @param string string indicating format of the map
      */
@@ -422,7 +417,7 @@ class Kaart
     }
 
     /**
-     * Saves the map as a file
+     * Saves the map as a file. See `show()` for possible formats. Returns `TRUE` if succeeded, `FALSE` if failed.
      *
      * @param string string containing path to file where the map should be written to
      * @param string string indicating format of the map
@@ -470,10 +465,11 @@ class Kaart
     }
 
     /**
-     * For bitmap maps only: returns a string of <area> elements for features of the map, to use in an imagemap
-     * HTML element. Must be called after creating a map!
+     * For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<imagemap>`
+     * HTML element. Can only be called **after** generating a map with
+     * the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated.
      *
-     * @return mixed string of <area> elements or FALSE if not a bitmap map
+     * @return mixed string of <area> elements or FALSE
      */
     public function getImagemap()
     {
@@ -485,10 +481,10 @@ class Kaart
     }
 
     /**
-     * Set an alternate file with paths for the map. File should be a geoJSON file (specification 2008)
-     * using EPSG:28992 as the coordinate system. See the coords directory for examples.
-     *
-     * Warning: file should not be user-submitted as it is used as-is.
+     * Path files are geoJSON files (specification 2008) containing coordinates and names for the features of the map.
+     * See the contents of the _coords_ directory for examples.
+     * Note that the coordinate system should be EPSG:28992. Only needed if the default paths file for the given map
+     * type does not suffice. Warning: file should not be user-submitted as it is used as-is.
      *
      * @param string string containing file name or path to file with alternate paths
      */
@@ -498,9 +494,9 @@ class Kaart
     }
 
     /**
-     * Add more layers on top of the base map. Typical use case: combining different choropleth type in one map,
-     * e.g. municipalities as the base with borders of larger areas drawn on top of them. Restricted to files
-     * in the coords directory.
+     * Adds more layers on top of the base map. Typical use case: combining different choropleth types in one map,
+     * e.g. municipalities as the base with borders of larger areas drawn on top of them.
+     * Restricted to files in the _coords_ directory.
      *
      * @param array $paths_files
      */
@@ -514,7 +510,7 @@ class Kaart
     }
 
     /**
-     * Get the title of the map
+     * Returns the title of the map. Empty string if no title has been set.
      *
      * @return string the title
      */
@@ -524,7 +520,7 @@ class Kaart
     }
 
     /**
-     * Set the title of the map
+     * Sets the title of the map. Is shown in-picture, above the map.
      *
      * @param string $title string containing the title
      */
@@ -536,14 +532,11 @@ class Kaart
     /**
      * Translates color names to hex codes and vice versa
      *
-     * @internal
+     * @param $color string indicating color (AABBGGRR hex, #RRGGBB hex, or HTML color name)
      *
-     * @param $color               string indicating color (AABBGGRR hex, #RRGGBB hex, or HTML color name)
-     * @param $current_symbol_type mixed
-     *
-     * @return array met respectievelijk de #RRGGBB en de AABBGGRR hex representatie
+     * @return array with the #RRGGBB and AABBGGRR hex representations
      */
-    public static function translateColor($color, $current_symbol_type = null)
+    public static function translateColor($color)
     {
         if (preg_match('/^[0-9a-fA-F]{8}$/', $color)) {
             // Google Earth AABBGGRR hex
@@ -564,23 +557,13 @@ class Kaart
             $hex_color = $color;
         } else {
             // presumably color name
-            /** @noinspection PhpDynamicAsStaticMethodCallInspection */
             list($r, $g, $b) = \Image_Color::namedColor2RGB($color);
-            /** @noinspection PhpDynamicAsStaticMethodCallInspection */
             $rrggbb = \Image_Color::rgb2hex(array($r, $g, $b));
             $bb = substr($rrggbb, 4, 2);
             $gg = substr($rrggbb, 2, 2);
             $rr = substr($rrggbb, 0, 2);
-
-            // GE _symbols can't have "fill:none"!
-            // if the current color == 'none' && the current symbol is of type 'filled',
-            // emulated empty fill with a 25% transparent white fill in KML
-            if ($color == 'none' && $current_symbol_type == 'filled') {
-                $ge_color = '7fffffff';
-            } else {
-                // opacity set to fully opaque
-                $ge_color = 'ff' . strtolower($bb . $gg . $rr);
-            }
+            // opacity set to fully opaque
+            $ge_color = 'ff' . strtolower($bb . $gg . $rr);
 
             $hex_color = '#' . $rrggbb;
         }
@@ -591,10 +574,9 @@ class Kaart
 
 
     /**
-     * Adds JavaScript or title attributes to show area names when hovering.
-     *
-     * In SVG maps embedded in the map itself and shown using Javascript.
-     * a list of <area> tags with title attributes is used to achieve the same effect in bitmap maps.
+     * Adds JavaScript or title attributes to show area names when hovering. In SVG maps embedded in the map itsel
+     * and shown using Javascript. A list of `<area>` tags with title attributes is used to achieve the same effect
+     * in bitmap maps. Request this with the `getImagemap()` method after calling `setInteractive()`.
      *
      * @param bool boolean TRUE or FALSE, interactive on or off
      */
@@ -604,10 +586,10 @@ class Kaart
     }
 
     /**
-     * Set the height of the map in pixels
-     *
-     * If you don't want the default height from the .ini file you can overrule it with this method.
-     * Probably you shouldn't, though. Note that this method should always be called after setPixelWidth().
+     * Sets the height of the map in pixels. If you don't want the default height from the .ini file (for the
+     * default map of the Netherlands height is e.g. 1.1 times the width), you can overrule it with an absolute value
+     * using this method. You probably shouldn't, though.
+     * Note that this method should always be called after `setPixelWidth()`.
      *
      * @param int integer for the desired height
      */
@@ -617,10 +599,9 @@ class Kaart
     }
 
     /**
-     * Set the width of the map in pixels
-     *
-     * If not used, width is the default value, defined in the .ini file for the map type
-     * Default height is a factor in the .ini file times the width
+     * Sets the width of the map in pixels. If not used, width is the default value, defined in the .ini file for
+     * the current map type. Default height is defined in the .ini file as a factor. For the default map showing
+     * the Netherlands height is e.g. 1.1 times the width.
      *
      * @param int integer for the desired width
      */
@@ -634,7 +615,7 @@ class Kaart
     }
 
     /**
-     * Returns the width of the map in pixels
+     * Returns the width of the map in pixels.
      *
      * @return int width of the map
      */
@@ -654,9 +635,9 @@ class Kaart
     }
 
     /**
-     * Returns an array with possible municipalities for the basemap. Works only if map is of type 'municipalities'.
+     * Synonym for `getPossibleAreas()` on a map of type 'municipalities'.
      *
-     * @return array associative array with municipality code => municipality name
+     * @return array
      */
     public function getPossibleMunicipalities()
     {
@@ -678,6 +659,8 @@ class Kaart
     }
 
     /**
+     * Gets the names of map areas from a GeoJSON file
+     *
      * @param $file
      * @return array
      */
@@ -693,6 +676,12 @@ class Kaart
         return $retval;
     }
 
+    /**
+     * Gets info for the basemap from its GeoJSON file
+     *
+     * @param $file
+     * @return array
+     */
     public static function getDataFromGeoJSON($file)
     {
         $map_lines = array();
@@ -728,6 +717,12 @@ class Kaart
         );
     }
 
+    /**
+     * Parses GeoJSON LineString into a PHP array
+     *
+     * @param $array
+     * @return array
+     */
     private static function parseLineString($array)
     {
         $coords = array();
@@ -738,11 +733,23 @@ class Kaart
         return $coords;
     }
 
+    /**
+     * Parses GeoJSON Polygon into a PHP array
+     *
+     * @param $array
+     * @return array
+     */
     private static function parsePolygon($array)
     {
         return self::parseLineString($array[0]);
     }
 
+    /**
+     * Parses GeoJSON MultiPolygon into a PHP array
+     *
+     * @param $array
+     * @return array
+     */
     private static function parseMultiPolygon($array)
     {
         $coords = array();
@@ -753,7 +760,10 @@ class Kaart
     }
 
     /**
-     * Add areas to be highlighted
+     * `$data` should be an array containing areas to be highlighted. Area codes are keys, colors are values.
+     * See the geoJSON files in the _coords_ directory for area codes or call `getPossibleAreas()` on a `Kaart` object.
+     * Colors can be either HTML color names, #RRGGBB hex strings, or AABBGGRR hex strings.
+     * The AA (opacity) part only has an effect on KML maps.
      *
      * @param array $data array containing areas to be highlighted (area codes are keys, colors are values)
      */
@@ -763,7 +773,8 @@ class Kaart
     }
 
     /**
-     * Add links to areas (potentially a different link for each area)
+     * Adds links to areas (potentially a different link for each area). `$data` should be an array
+     * with area codes as keys and links as values.
      *
      * @param array array containing links for areas (area codes are keys, href values are values)
      * @param mixed NULL or string with value of 'target' attribute for the links
@@ -779,7 +790,10 @@ class Kaart
     }
 
     /**
-     * Add the same link to all areas. %s placeholder will be replaced with area code
+     * Adds the same link to all areas. `%s` placeholder will be replaced with the area code. For bitmap maps
+     * the links are in `<area>` elements, which can be obtained by calling the `getImagemap()` method,
+     * for other (textual) formats the links are embedded in the map. The optional parameter `$target`
+     * can be used to create e.g. `target="_blank"` attributes for the links.
      *
      * @param string string containing href value of the link
      * @param mixed  NULL or string with value of 'target' attribute for the link
@@ -793,9 +807,9 @@ class Kaart
     }
 
     /**
-     * If alternative styling for features of the map is needed. See the ini directory for examples.
-     *
-     *  Warning: file should not be user-submitted as it is used as-is.
+     * If alternative styling for features of the map is needed. Can be from the _ini_ directory (no full path needed)
+     * or from elsewhere. See the _ini_ directory for examples.
+     * Warning: file should not be user-submitted as it is used as-is.
      *
      * @param string $ini_file
      */
@@ -831,7 +845,10 @@ class Kaart
     }
 
     /**
-     * Add the same link to all highlighted areas. %s placeholder will be replaced with area code
+     * Adds the same link to all highlighted areas. `%s` placeholder will be replaced with the area code.
+     * For bitmap maps the links are in `<area>` elements, which can be obtained by calling the `getImagemap()` method,
+     * for other (textual) formats the links are embedded in the map. The optional parameter `$target` can be used
+     * to create e.g. `target="_blank"` attributes for the links.
      *
      * @param string string containing href value of the link
      * @param mixed  NULL or string with value of 'target' attribute for the link
@@ -846,8 +863,10 @@ class Kaart
     }
 
     /**
-     * Add tooltips to areas. These become 'title' attributes in imagemap <area>s or SVG <path>s, <description>
-     * elements in KML, and 'name' properties in GeoJSON.
+     * Adds tooltips to areas. These become 'title' attributes in HTML `<area>` elements or SVG `<path>` elements,
+     * `<description>` elements in KML, and 'name' properties in GeoJSON. `$data` should be an array
+     * with area codes as keys and strings as values. Note that if `$kaart->setInteractive()` was
+     * set to `TRUE` previously, the tooltips overwrite the default area names for the given areas.
      *
      * @param array array containing tooltips for areas (area codes are keys, tooltip texts are values)
      */
@@ -857,11 +876,14 @@ class Kaart
     }
 
     /**
-     * Add JavaScript events to areas
+     * Adds JavaScript code to areas. Possible values of the `$event` parameter: onclick, onmouseover, onmouseout.
+     * Note (SVG maps only): if `$kaart->setInteractive()` was set to `TRUE` previously,
+     * any onmouseover or onmouseout events added with this method overwrite the default
+     * onmouseover and onmouseout events. `$data` should be an array with area codes as keys
+     * and Javascript code as values.
      *
-     * @param array  array containing javascript for areas (area codes are keys, javascript code snippets are values)
-     * @param string string containing event on which the Javascript should execute.
-     * Possible values: onclick, onmouseover, onmouseout
+     * @param array  array containing javascript for areas
+     * @param string string containing event (onclick, onmouseover, onmouseout).
      */
     public function setJavaScript($data, $event = 'onclick')
     {
@@ -886,8 +908,6 @@ class Kaart
             'title' => $this->title,
             'fontsize' => $this->default_fontsize,
             'map_definitions' => $this->map_definitions,
-            'parts' => $this->parts,
-            'backgrounds' => $this->backgrounds,
             'highlighted' => $this->map_array,
             'tooltips' => $this->tooltips,
             'links' => $this->links,
@@ -944,6 +964,7 @@ class Kaart
 
     /**
      * Initializes settings for the map based on the provided ini file
+     *
      * @param $ini_file
      */
     private function parseIniFile($ini_file)
@@ -975,6 +996,12 @@ class Kaart
         $this->default_fontsize = $this->map_definitions['map_settings']['svg_default_fontsize'];
     }
 
+    /**
+     * Returns the full system path to the given file
+     *
+     * @param $paths_file
+     * @return string|null
+     */
     private function getRealPathToPathsFile($paths_file)
     {
         $retval = null;
@@ -991,7 +1018,7 @@ class Kaart
     }
 
     /**
-     * returns the current associative array with map data (area codes are keys, colors are values)
+     * Returns the current associative array with map data (highlighted areas).
      *
      * @return array
      */
@@ -1001,6 +1028,8 @@ class Kaart
     }
 
     /**
+     * Returns an array of possible map types to be used in the constructor.
+     *
      * @return array
      */
     public static function getAllowedMaptypes()
@@ -1009,6 +1038,8 @@ class Kaart
     }
 
     /**
+     * Returns an array of possible map formats to be used in `show()`, `fetch()` or `saveAsFile()` calls.
+     *
      * @return array
      */
     public static function getAllowedFormats()

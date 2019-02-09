@@ -111,7 +111,7 @@ $kaart->setTitle('The 40 COROP areas');
 
 ---
 #### `setInteractive(bool $value = true)`
-Adds JavaScript or title attributes to show area names when hovering. In SVG maps embedded in the map itself and shown using Javascript. A list of `<area>``` tags with title attributes is used to achieve the same effect in bitmap maps. Request this with the `getImagemap()` method after calling `setInteractive()`.
+Adds JavaScript or title attributes to show area names when hovering. In SVG maps embedded in the map itself and shown using Javascript. A list of `<area>` tags with title attributes is used to achieve the same effect in bitmap maps. Request this with the `getImagemap()` method after calling `setInteractive()`.
 #### Examples
 ```php
 $kaart = new Kaart('provincies');
@@ -224,8 +224,8 @@ Returns the height of the map in pixels.
 Returns the title of the map. Empty string if no title has been set.
 
 ---
-#### `string getImagemap()`
-For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<imagemap>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! 
+#### `string | boolean getImagemap()`
+For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<imagemap>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated. 
 
 ---
 #### `array getPossibleAreas()`
@@ -240,7 +240,7 @@ Synonym for `getPossibleAreas()` on a map of type 'municipalities'/'gemeentes'.
  Hands the map over to a web browser for further handling. Depending on the capabilities and settings of the browser, the map will be shown on a page, handed to another application, or downloaded. Possible formats are: 'svg', 'png', 'gif','jpeg', 'jpg', 'kml', 'json'.
 
 ---
-#### `string|blob fetch(string $format = 'svg')`
+#### `string|resource fetch(string $format = 'svg')`
 Returns the map as a string (SVG, JSON, KML) or binary blob (bitmap image). See `show()` for possible formats. 
 
 ---
