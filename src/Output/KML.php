@@ -31,22 +31,18 @@ class KML extends Image
 
     /**
      * @var object DOM object dat de KML bevat
-     * @access public
      */
     public $dom;
     /**
      * @var object DOMNode object voor het Document element
-     * @access private
      */
     private $document;
     /**
      * @var array <LookAt> elementen
-     * @access private
      */
     private $lookat = array();
     /**
      * @var boolean is there a basemap drawn on top of Google Maps?
-     * @access private
      */
     private $basemap = false;
 
@@ -56,12 +52,6 @@ class KML extends Image
     private $default_polystyle_color;
 
     /**
-     * De constructor
-     *
-     * Maakt de grondkaart in KML
-     *
-     * @access public
-     *
      * @param array array with parameters for map construction
      */
     public function __construct($parameters)
@@ -107,13 +97,13 @@ class KML extends Image
 
 
     /**
-     * @param               $coordinates
-     * @param               $name
-     * @param               $id
-     * @param               $link
-     * @param               $tooltip
+     * @param $coordinates
+     * @param $name
+     * @param $id
+     * @param $link
+     * @param $tooltip
      * @param \DOMNode $folder
-     * @param               $highlight
+     * @param string $highlight
      * @param string $outline
      * @param string $strokefactor
      */
@@ -236,11 +226,6 @@ class KML extends Image
         }
     }
 
-    /**
-     * Zet de titel bij de kaart
-     *
-     * @access private
-     */
     private function setTitle()
     {
         if (empty($this->title)) {
@@ -252,11 +237,6 @@ class KML extends Image
         $this->document->appendChild($name);
     }
 
-    /**
-     * LookAt
-     *
-     * @access private
-     */
     private function setLookAt()
     {
         $lookat = $this->dom->createElement('LookAt');
@@ -305,7 +285,6 @@ class KML extends Image
 
         $map_data = Kaart::getDataFromGeoJSON($this->kaart_paths_file);
         $map_lines = $map_data['map_lines']['paths'];
-//    $default_path_styling = $map_data['map_lines']['styling'];
         $map_name = $map_data['map_name'];
         $this->map_copyright_strings[] = $map_data['map_copyright_string'];
 

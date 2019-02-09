@@ -204,7 +204,4 @@ class JSON extends Image
         return $data;
     }
 
-    public function drawSymbol($coordinaten, $kloeke_nr, $plaatsnaam, $symbol, $size, $style, $link_array, $rd = true)
-    {
-    }
 }
