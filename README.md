@@ -25,9 +25,9 @@ To install as a library, use this in your composer.json:
 }
 ```
 
-To install as a project in `<DIRECTORYNAME>`, using composer:
+To install as a project using composer:
 
-`$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+`$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
 
 Running the PHPUnit tests for gemeentekaart-core:
 

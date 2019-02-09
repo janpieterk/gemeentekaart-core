@@ -25,9 +25,9 @@ Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/
 }
 ```
 
-Als een project installeren in `<DIRECTORYNAME>` met composer:
+Als een project installeren met composer:
 
-`$  composer create-project janpieterk/gemeentekaart-core <DIRECTORYNAME> --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+`$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
 
 De PHPUnit tests van gemeentekaart-core laten lopen:
 
