@@ -29,7 +29,7 @@ use JanPieterK\GemeenteKaart\Kaart;
  * http://stackoverflow.com/questions/10277317/abstract-class-children-type
  * Multiple Inheritance vs. Composition
  * http://propelorm.org/blog/2011/03/03/don-t-copy-code-oh-and-inheritance-and-composition-are-bad-too.html
- * 
+ *
  * @method drawPath($path_id, $data, $path_type, $map_definitions, $highlighted, $links, $tooltips)
  */
 abstract class Image
