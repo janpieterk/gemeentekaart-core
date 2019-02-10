@@ -12,6 +12,7 @@
     "gis",
     "geo"
   ],
+  "homepage": "https://github.com/janpieterk/gemeentekaart-core",
   "autoload": {
     "psr-0": {
       "Image_": "lib/Image_Color",
