@@ -186,10 +186,20 @@ class KaartTest extends TestCase
      */
     public function testfetchJSON()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '20712ee65f9e99c17924689de0a57185';
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $expected = array(443, 36681);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $num_features = count($jsonkaart['features']);
+        $num_points = 0;
+        foreach($jsonkaart['features'] as $f) {
+            if ($f['geometry']['type'] == 'Polygon') {
+                $num_points += count($f['geometry']['coordinates'][0]);
+            } elseif ($f['geometry']['type'] == 'MultiPolygon') {
+                foreach($f['geometry']['coordinates'][0] as $c) {
+                    $num_points += count($c);
+                }
+            }
+        }
+        $this->assertEquals($expected, array($num_features, $num_points));
     }
 
 
@@ -198,12 +208,21 @@ class KaartTest extends TestCase
      */
     public function testfetchJSONDialectAreas()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '75c8f332b7d9a369f4b18ea900ce35ea';
-        unset($this->kaart);
+        $expected = array(25, 7160);
         $this->kaart = new Kaart('dialectareas');
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $num_features = count($jsonkaart['features']);
+        $num_points = 0;
+        foreach($jsonkaart['features'] as $f) {
+            if ($f['geometry']['type'] == 'Polygon') {
+                $num_points += count($f['geometry']['coordinates'][0]);
+            } elseif ($f['geometry']['type'] == 'MultiPolygon') {
+                foreach($f['geometry']['coordinates'][0] as $c) {
+                    $num_points += count($c);
+                }
+            }
+        }
+        $this->assertEquals($expected, array($num_features, $num_points));
     }
 
 
@@ -252,13 +271,20 @@ class KaartTest extends TestCase
      */
     public function testHighlightJSON()
     {
-
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = 'feb18f069e642bf92ded7698abc20a6b';
+        $expected = array(
+            'name' => 'Hillegom',
+            'id' => 'g_0534',
+            'style' => array(
+                'fill' => '#FFC513',
+                'stroke' => '#808080',
+                'stroke-width' => '200'
+            )
+        );
         $gemeentes = array('g_0534' => '#FFC513');
         $this->kaart->setData($gemeentes);
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $actual = $jsonkaart['features'][442]['properties'];
+        $this->assertEquals($expected, $actual);
     }
 
 
@@ -393,13 +419,21 @@ class KaartTest extends TestCase
      */
     public function testaddTooltipsJSON()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '7de3e9d37882a7384a656f0c14960117';
+        $expected = array(
+            'name' => 'Juinen',
+            'id' => 'g_0363',
+            'style' => array(
+                'fill' => '#FFC513',
+                'stroke' => '#808080',
+                'stroke-width' => '200'
+            )
+        );
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setData($gemeentes);
         $this->kaart->setToolTips(array('g_0363' => 'Juinen'));
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $actual = $jsonkaart['features'][442]['properties'];
+        $this->assertEquals($expected, $actual);
     }
 
 
@@ -527,12 +561,13 @@ class KaartTest extends TestCase
      */
     public function testsetLinksJSON()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '56825134fd055c706de3fb16c5a16483';
+        $expected = array('http://www.janpieterkunst.nl/', '_blank');
         $links = array('g_0003' => 'http://www.janpieterkunst.nl/');
         $this->kaart->setLinks($links, '_blank');
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $properties = $jsonkaart['features'][0]['properties'];
+        $actual = array($properties['href'], $properties['target']);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testsetJavaScriptSVGOnclick()
@@ -572,12 +607,13 @@ class KaartTest extends TestCase
      */
     public function testsetJavaScriptJSONOnclick()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '90f1dfa243e65c3284ae10b23c356393';
+        $expected = array('#FFC513', "alert(\'g_0003\');");
         $this->kaart->setData(array('g_0003' => '#FFC513'));
         $this->kaart->setJavaScript(array('g_0003' => "alert('g_0003');"));
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $actual = array($jsonkaart['features'][442]['properties']['style']['fill'],
+            $jsonkaart['features'][442]['properties']['onclick']);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testsetJavaScripBitmapOnclick()
@@ -652,11 +688,12 @@ class KaartTest extends TestCase
      */
     public function testSetGeneralLinkJSON()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = '7b096088f28dbf71bd0286ee32ed5f29';
+        $expected = 'http://www.example.com/?gemeente=g_0003';
         $this->kaart->setLink('http://www.example.com/?gemeente=%s');
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $properties = $jsonkaart['features'][0]['properties'];
+        $actual = $properties['href'];
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSetGeneralLinkSVGHighlightedOnly()
@@ -698,13 +735,15 @@ class KaartTest extends TestCase
      */
     public function testSetGeneralLinkJSONHighlightedOnly()
     {
-        $filename = substr(__FUNCTION__, 4) . '.json';
-        $expected = 'aad356a29661a4bba0faf3a0c10b2ebd';
+        $expected = 'http://www.example.com/?code=g_0363';
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setData($gemeentes);
         $this->kaart->setLinkHighlighted('http://www.example.com/?code=%s');
-        $actual = md5($this->saveFile($filename, $this->kaart->fetch('json')));
-        $this->assertEquals($expected, $actual, "check file $filename");
+        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $properties = $jsonkaart['features'][0]['properties'];
+        $this->assertArrayNotHasKey('href', $properties);
+        $actual = $jsonkaart['features'][442]['properties']['href'];
+        $this->assertEquals($expected, $actual);
     }
 
     /**
