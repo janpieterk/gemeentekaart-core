@@ -41,7 +41,7 @@ class SVG extends Image
      */
     private $interactive = false;
     /**
-     * @var int  x-coordinat for the title, also used for dynamic tooltip
+     * @var int  x-coordinate for the title, also used for dynamic tooltip
      */
     private $title_x;
     /**
@@ -56,10 +56,6 @@ class SVG extends Image
      * @var array default style for the title
      */
     private $title_style = array('fill' => 'black', 'font-weight' => 'bold', 'text-anchor' => 'middle');
-    /**
-     * @var int font size of the legend
-     */
-    private $fontsize;
 
     /**
      * @param $parameters array
@@ -72,7 +68,6 @@ class SVG extends Image
         $width = $parameters['width'];
         $height = $parameters['height'];
         $this->interactive = $parameters['interactive'];
-        $this->fontsize = $parameters['fontsize'];
         if (array_key_exists('highlighted', $parameters)) {
             $highlighted = $parameters['highlighted'];
         } else {
