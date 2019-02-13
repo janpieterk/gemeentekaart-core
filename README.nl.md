@@ -10,7 +10,7 @@ Kaarten kunnen gegenereerd worden als SVG (default), PNG, GIF, JPEG, KML, GeoJSO
 
 ## Hoe te beginnen
 
-Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/) als een bibliotheek te installeren:
+Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/) als een bibliotheek te installeren vanuit github:
 ```json
 {
     "repositories": [
@@ -25,9 +25,24 @@ Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/
 }
 ```
 
-Als een project installeren met composer:
+Laat `repositories` weg om als een bibliotheek te installeren vanuit [packagist.org](https://packagist.org):
+
+```json
+{
+    "require": {
+    "janpieterk/gemeentekaart-core": "dev-master"
+    }
+}
+```
+
+Als een project installeren vanuit github met composer:
 
 `$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+
+Laat `--repository` weg om vanuit [packagist.org](https://packagist.org) te installeren:
+
+`$  composer create-project janpieterk/gemeentekaart-core --stability=dev`
+
 
 De PHPUnit tests van gemeentekaart-core laten lopen:
 

@@ -10,7 +10,7 @@ Output formats are: SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
 
 ## Getting Started
 
-To install as a library, use this in your composer.json:
+To install as a library from github, use this in your composer.json:
 ```json
 {
     "repositories": [
@@ -25,9 +25,24 @@ To install as a library, use this in your composer.json:
 }
 ```
 
-To install as a project using composer:
+To install as a library from [packagist.org](https://packagist.org), leave out the `repositories`:
+
+```json
+{
+    "require": {
+    "janpieterk/gemeentekaart-core": "dev-master"
+    }
+}
+```
+
+
+To install as a project from github using composer:
 
 `$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+
+To install as a project from [packagist.org](https://packagist.org), leave out the `--repository`:
+
+`$  composer create-project janpieterk/gemeentekaart-core --stability=dev`
 
 Running the PHPUnit tests for gemeentekaart-core:
 
