@@ -20,7 +20,7 @@ Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/
         }
     ],
     "require": {
-    "janpieterk/gemeentekaart-core": "1.0.0"
+    "janpieterk/gemeentekaart-core": "1.0.1"
     }
 }
 ```
@@ -30,7 +30,7 @@ Laat `repositories` weg om als een bibliotheek te installeren vanuit [packagist.
 ```json
 {
     "require": {
-    "janpieterk/gemeentekaart-core": "1.0.0"
+    "janpieterk/gemeentekaart-core": "1.0.1"
     }
 }
 ```
