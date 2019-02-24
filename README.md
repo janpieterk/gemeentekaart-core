@@ -20,7 +20,7 @@ To install as a library from github, use this in your composer.json:
         }
     ],
     "require": {
-    "janpieterk/gemeentekaart-core": "1.0.0"
+    "janpieterk/gemeentekaart-core": "1.0.1"
     }
 }
 ```
@@ -30,7 +30,7 @@ To install as a library from [packagist.org](https://packagist.org), leave out t
 ```json
 {
     "require": {
-    "janpieterk/gemeentekaart-core": "1.0.0"
+    "janpieterk/gemeentekaart-core": "1.0.1"
     }
 }
 ```
@@ -38,11 +38,15 @@ To install as a library from [packagist.org](https://packagist.org), leave out t
 
 To install as a project from github using composer:
 
-`$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+```bash
+$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}'
+```
 
 To install as a project from [packagist.org](https://packagist.org), leave out the `--repository`:
 
-`$  composer create-project janpieterk/gemeentekaart-core --stability=dev`
+```bash
+$  composer create-project janpieterk/gemeentekaart-core
+```
 
 Running the PHPUnit tests for gemeentekaart-core:
 
