@@ -20,7 +20,7 @@ To install as a library from github, use this in your composer.json:
         }
     ],
     "require": {
-    "janpieterk/gemeentekaart-core": "dev-master"
+    "janpieterk/gemeentekaart-core": "1.0.0"
     }
 }
 ```
@@ -30,7 +30,7 @@ To install as a library from [packagist.org](https://packagist.org), leave out t
 ```json
 {
     "require": {
-    "janpieterk/gemeentekaart-core": "dev-master"
+    "janpieterk/gemeentekaart-core": "1.0.0"
     }
 }
 ```

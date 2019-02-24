@@ -20,7 +20,7 @@ Gebruik het volgende in composer.json om met [composer](https://getcomposer.org/
         }
     ],
     "require": {
-    "janpieterk/gemeentekaart-core": "dev-master"
+    "janpieterk/gemeentekaart-core": "1.0.0"
     }
 }
 ```
@@ -30,18 +30,22 @@ Laat `repositories` weg om als een bibliotheek te installeren vanuit [packagist.
 ```json
 {
     "require": {
-    "janpieterk/gemeentekaart-core": "dev-master"
+    "janpieterk/gemeentekaart-core": "1.0.0"
     }
 }
 ```
 
 Als een project installeren vanuit github met composer:
 
-`$  composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}' --stability=dev`
+```bash
+$ composer create-project janpieterk/gemeentekaart-core --repository='{"type":"vcs","url":"https://github.com/janpieterk/gemeentekaart-core"}'
+```
 
 Laat `--repository` weg om vanuit [packagist.org](https://packagist.org) te installeren:
 
-`$  composer create-project janpieterk/gemeentekaart-core --stability=dev`
+```bash
+$ composer create-project janpieterk/gemeentekaart-core
+```
 
 
 De PHPUnit tests van gemeentekaart-core laten lopen:
