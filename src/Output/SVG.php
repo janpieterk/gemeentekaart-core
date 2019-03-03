@@ -239,7 +239,7 @@ class SVG extends Image
     /**
      * @param      $coords
      * @param      $path_id
-     * @param $name
+     * @param      $name
      * @param      $closed
      * @param      $style
      * @param      $links
@@ -277,7 +277,7 @@ class SVG extends Image
                 $t->setTitle(Kaart::escapeXMLString($name));
             }
             if ($enclosing_group === false && isset($t)) {
-                $svgpath->addChild($t);                
+                $svgpath->addChild($t);
             }
         }
 
@@ -319,12 +319,12 @@ class SVG extends Image
             }
             if (isset($t)) {
                 $has_title = false;
-                foreach($enclosing_group->_elements as $el) {
+                foreach ($enclosing_group->_elements as $el) {
                     if (get_class($el) === 'XML_SVG_Title') {
                         $has_title = true;
                     }
                 }
-                if (! $has_title) {
+                if (!$has_title) {
                     $enclosing_group->addChild($t);
                 }
             }

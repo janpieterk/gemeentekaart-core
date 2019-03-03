@@ -69,7 +69,6 @@ class RequestParser
                     || isset($this->raw_request_array['possibletypes'])
                     || isset($this->raw_request_array['possibleformats']))
             ) {
-
                 if (isset($this->raw_request_array['possiblemunicipalities'])) {
                     $this->checkBooleanTrue('possiblemunicipalities');
                 } elseif (isset($this->raw_request_array['possibletypes'])) {
@@ -77,7 +76,6 @@ class RequestParser
                 } elseif (isset($this->raw_request_array['possibleformats'])) {
                     $this->checkBooleanTrue('possibleformats');
                 }
-
             } else {
                 $this->checkParameter('type');
                 $this->checkParameter('format');
@@ -135,10 +133,8 @@ class RequestParser
                 if (!isset($this->raw_request_array['format'])) {
                     $this->parameters['format'] = 'png';
                 } elseif (!in_array($this->raw_request_array['format'], $this->allowed_formats)) {
-                    $this->errors[] = 'Parameter format ' . $this->raw_request_array['format'] . ' not one of ' . join(
-                            ', ',
-                            $this->allowed_formats
-                        );
+                    $this->errors[] = 'Parameter format ' . $this->raw_request_array['format'] . ' not one of '
+                            . join(', ', $this->allowed_formats);
                 } else {
                     $this->parameters['format'] = $this->raw_request_array['format'];
                 }

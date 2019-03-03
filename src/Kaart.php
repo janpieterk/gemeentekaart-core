@@ -1056,6 +1056,4 @@ class Kaart
     {
         return self::$allowedformats;
     }
-
-
 }

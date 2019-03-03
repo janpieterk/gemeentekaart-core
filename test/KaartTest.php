@@ -102,7 +102,7 @@ class KaartTest extends TestCase
             // see http://nl1.php.net/manual/en/imagick.compareimages.php + comments
             $image1 = new imagick();
             $image2 = new imagick();
-            $image1->SetOption('fuzz',  $fuzzfactor . '%');
+            $image1->SetOption('fuzz', $fuzzfactor . '%');
             $image1->readImage($actual);
             $image2->readImage($expected);
             $result = $image1->compareImages($image2, 1);
@@ -187,14 +187,14 @@ class KaartTest extends TestCase
     public function testfetchJSON()
     {
         $expected = array(443, 36681);
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $num_features = count($jsonkaart['features']);
         $num_points = 0;
-        foreach($jsonkaart['features'] as $f) {
+        foreach ($jsonkaart['features'] as $f) {
             if ($f['geometry']['type'] == 'Polygon') {
                 $num_points += count($f['geometry']['coordinates'][0]);
             } elseif ($f['geometry']['type'] == 'MultiPolygon') {
-                foreach($f['geometry']['coordinates'][0] as $c) {
+                foreach ($f['geometry']['coordinates'][0] as $c) {
                     $num_points += count($c);
                 }
             }
@@ -210,14 +210,14 @@ class KaartTest extends TestCase
     {
         $expected = array(25, 7160);
         $this->kaart = new Kaart('dialectareas');
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $num_features = count($jsonkaart['features']);
         $num_points = 0;
-        foreach($jsonkaart['features'] as $f) {
+        foreach ($jsonkaart['features'] as $f) {
             if ($f['geometry']['type'] == 'Polygon') {
                 $num_points += count($f['geometry']['coordinates'][0]);
             } elseif ($f['geometry']['type'] == 'MultiPolygon') {
-                foreach($f['geometry']['coordinates'][0] as $c) {
+                foreach ($f['geometry']['coordinates'][0] as $c) {
                     $num_points += count($c);
                 }
             }
@@ -282,7 +282,7 @@ class KaartTest extends TestCase
         );
         $gemeentes = array('g_0534' => '#FFC513');
         $this->kaart->setData($gemeentes);
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $actual = $jsonkaart['features'][442]['properties'];
         $this->assertEquals($expected, $actual);
     }
@@ -290,7 +290,7 @@ class KaartTest extends TestCase
 
     public function testsaveAsFileSVG()
     {
-        list($new_file_exists, $message) = $this->myFileExists( substr(__FUNCTION__, 4) . '.svg', 'svg');
+        list($new_file_exists, $message) = $this->myFileExists(substr(__FUNCTION__, 4) . '.svg', 'svg');
         $this->assertTrue($new_file_exists, $message);
     }
 
@@ -431,7 +431,7 @@ class KaartTest extends TestCase
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setData($gemeentes);
         $this->kaart->setToolTips(array('g_0363' => 'Juinen'));
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $actual = $jsonkaart['features'][442]['properties'];
         $this->assertEquals($expected, $actual);
     }
@@ -552,7 +552,7 @@ class KaartTest extends TestCase
         $expected = array('http://www.janpieterkunst.nl/', '_blank');
         $links = array('g_0003' => 'http://www.janpieterkunst.nl/');
         $this->kaart->setLinks($links, '_blank');
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $properties = $jsonkaart['features'][0]['properties'];
         $actual = array($properties['href'], $properties['target']);
         $this->assertEquals($expected, $actual);
@@ -598,7 +598,7 @@ class KaartTest extends TestCase
         $expected = array('#FFC513', "alert(\'g_0003\');");
         $this->kaart->setData(array('g_0003' => '#FFC513'));
         $this->kaart->setJavaScript(array('g_0003' => "alert('g_0003');"));
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $actual = array($jsonkaart['features'][442]['properties']['style']['fill'],
             $jsonkaart['features'][442]['properties']['onclick']);
         $this->assertEquals($expected, $actual);
@@ -678,7 +678,7 @@ class KaartTest extends TestCase
     {
         $expected = 'http://www.example.com/?gemeente=g_0003';
         $this->kaart->setLink('http://www.example.com/?gemeente=%s');
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $properties = $jsonkaart['features'][0]['properties'];
         $actual = $properties['href'];
         $this->assertEquals($expected, $actual);
@@ -727,7 +727,7 @@ class KaartTest extends TestCase
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setData($gemeentes);
         $this->kaart->setLinkHighlighted('http://www.example.com/?code=%s');
-        $jsonkaart = json_decode($this->kaart->fetch('json'), TRUE);
+        $jsonkaart = json_decode($this->kaart->fetch('json'), true);
         $properties = $jsonkaart['features'][0]['properties'];
         $this->assertArrayNotHasKey('href', $properties);
         $actual = $jsonkaart['features'][442]['properties']['href'];
@@ -970,5 +970,4 @@ class KaartTest extends TestCase
         $actual = md5($this->saveFile($filename, $this->kaart->fetch('kml')));
         $this->assertEquals($expected, $actual, "check file $filename");
     }
-
 }

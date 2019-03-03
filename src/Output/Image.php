@@ -117,7 +117,6 @@ abstract class Image
                     $tooltips
                 );
             }
-
         }
     }
 }

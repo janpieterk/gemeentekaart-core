@@ -198,7 +198,7 @@ class JSON extends Image
                 $geojson['metadata']['copyright'][] = $string;
             }
         }
-        $data = json_encode(\Vicchi\GeoJson\Rewind::rewind($geojson, TRUE));
+        $data = json_encode(\Vicchi\GeoJson\Rewind::rewind($geojson, true));
 
         return $data;
     }
