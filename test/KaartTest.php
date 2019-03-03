@@ -383,7 +383,7 @@ class KaartTest extends TestCase
     public function testaddTooltipsNonInteractiveSVG()
     {
         $filename = substr(__FUNCTION__, 4) . '.svg';
-        $expected = 'e0f443bc98758ab9eb93c729e7521c09';
+        $expected = 'a5ffc828b54489c8e24daa706ac59002';
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setData($gemeentes);
         $this->kaart->setToolTips(array('g_0363' => 'Juinen'));
@@ -394,7 +394,7 @@ class KaartTest extends TestCase
     public function testaddTooltipsInteractiveSVG()
     {
         $filename = substr(__FUNCTION__, 4) . '.svg';
-        $expected = 'fb05e885e4807035f5b12df833cfb2cc';
+        $expected = 'f8123f92e7dad6b7381820862951c0dc';
         $gemeentes = array('g_0363' => '#FFC513');
         $this->kaart->setInteractive();
         $this->kaart->setData($gemeentes);
@@ -481,22 +481,10 @@ class KaartTest extends TestCase
 
     public function testsetInteractiveSVG()
     {
-
         $this->kaart->setInteractive();
-
-        $expected = KAART_ONMOUSEOVER_ECMASCRIPT;
         $svg = simplexml_load_string($this->kaart->fetch('svg'));
-
-        $actual = strval($svg->defs->script);
-        $this->assertequals($expected, $actual);
-        $expected = 'tooltip';
-        $actual = trim($svg->g[0]->text);
-        $this->assertequals($expected, $actual);
-        $expected = 'tooltip';
-        $actual = trim($svg->g[0]['id']);
-        $this->assertequals($expected, $actual);
-        $expected = "ShowTooltip('Appingedam')";
-        $actual = trim($svg->g[1]->path[0]['onmouseover']);
+        $expected = "Appingedam";
+        $actual = trim($svg->g[0]->path[0]->title);
         $this->assertequals($expected, $actual);
     }
 
@@ -586,7 +574,7 @@ class KaartTest extends TestCase
         $this->kaart->setInteractive();
         $this->kaart->setData(array('g_0003' => '#FFC513'));
         $this->kaart->setJavaScript(array('g_0003' => 'alert(\'g_0003\');'), 'onmouseover');
-        $expected = "ce54771ade48e8dbbb06d15799459334";
+        $expected = "bdc67b3a013df088bed498a3ce3953e8";
         $actual = md5($this->saveFile($filename, $this->kaart->fetch()));
         $this->assertEquals($expected, $actual, "check file $filename");
     }

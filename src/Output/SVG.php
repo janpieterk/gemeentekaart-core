@@ -93,17 +93,12 @@ class SVG extends Image
         $this->title_x = $map_definitions['map_settings']['svg_title_x'];
         $this->title_y = $map_definitions['map_settings']['svg_title_y'];
         $this->title_fontsize = $map_definitions['map_settings']['svg_title_fontsize'];
-        $tooltip_x = $map_definitions['map_settings']['svg_tooltip_x'];
-        $tooltip_y = $map_definitions['map_settings']['svg_tooltip_y'];
-        $tooltip_text_anchor = $map_definitions['map_settings']['svg_tooltip_text-anchor'];
 
         if (!empty($this->title)) {
             // make space above the map for the title
             $viewbox_height += $title_extra_space;
             $translate_y += $title_extra_space;
-            $tooltip_y += $title_extra_space;
         }
-
 
         $this->svg = new XML_SVG_Document(array('width' => $width, 'height' => $height));
         $this->svg->setParam('viewBox', '0 0 ' . $viewbox_width . ' ' . $viewbox_height);
@@ -112,31 +107,6 @@ class SVG extends Image
 
         if (array_key_exists('picturebackground', $parameters)) {
             $this->svg->addChild($parameters['picturebackground']);
-        }
-
-        if ($this->interactive || !empty($tooltips)) {
-            // add ECMAscript for placenames onmouseover
-            $defs = new \XML_SVG_Defs;
-            $script = new XML_SVG_Script(array('type' => 'text/ecmascript'));
-            $javascript = KAART_ONMOUSEOVER_ECMASCRIPT;
-            $cdata = new XML_SVG_CData($javascript);
-            $script->addChild($cdata);
-            $defs->addChild($script);
-            $this->svg->addChild($defs);
-            $g = new \XML_SVG_Group(array('id' => 'tooltip'));
-            $text = new XML_SVG_Text(array(
-                'id' => 'ttt',
-                'text' => 'tooltip',
-                'x' => $tooltip_x,
-                'y' => $tooltip_y,
-                'display' => 'none',
-                'fill' => 'blue',
-                'font-size' => $this->title_fontsize,
-                'font-weight' => 'bold',
-                'text-anchor' => $tooltip_text_anchor
-            ));
-            $g->addChild($text);
-            $this->svg->addChild($g);
         }
 
         $this->transformer = new \XML_SVG_Group(array(
@@ -300,12 +270,14 @@ class SVG extends Image
         if ($map_definitions['map_settings']['basemap_interactive']) {
             // if the path is a municipality, the id is of the form 'g_[numerical code]'
             if (!empty($tooltip) && strpos($path_id, 'g_') === 0) {
-                $svgpath->setParam('onmouseover', "ShowTooltip('" . Kaart::escapeJSString($tooltip) . "')");
-                $svgpath->setParam('onmouseout', 'HideTooltip()');
-            } elseif ($this->interactive && /*strpos($path_id, 'g_') === 0*/
-                !is_null($name)) {
-                $svgpath->setParam('onmouseover', "ShowTooltip('" . Kaart::escapeJSString($name) . "')");
-                $svgpath->setParam('onmouseout', 'HideTooltip()');
+                $t = new \XML_SVG_Title();
+                $t->setTitle(Kaart::escapeXMLString($tooltip));
+            } elseif ($this->interactive && !is_null($name)) {
+                $t = new \XML_SVG_Title();
+                $t->setTitle(Kaart::escapeXMLString($name));
+            }
+            if ($enclosing_group === false && isset($t)) {
+                $svgpath->addChild($t);                
             }
         }
 
@@ -344,6 +316,17 @@ class SVG extends Image
                 $enclosing_group->addChild($g);
             } else {
                 $enclosing_group->addChild($svgpath);
+            }
+            if (isset($t)) {
+                $has_title = false;
+                foreach($enclosing_group->_elements as $el) {
+                    if (get_class($el) === 'XML_SVG_Title') {
+                        $has_title = true;
+                    }
+                }
+                if (! $has_title) {
+                    $enclosing_group->addChild($t);
+                }
             }
         } else {
             if (isset($g) && isset($a)) {
