@@ -970,4 +970,38 @@ class KaartTest extends TestCase
         $actual = md5($this->saveFile($filename, $this->kaart->fetch('kml')));
         $this->assertEquals($expected, $actual, "check file $filename");
     }
+
+    public function testWrongMapType()
+    {
+        unset($this->kaart);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->kaart = new Kaart('nonexistingtype');
+    }
+
+    public function testWrongYear()
+    {
+        unset($this->kaart);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Year 1800 not available for map type municipalities');
+        $this->kaart = new Kaart('gemeentes', 1800);
+    }
+
+    public function testMapWithYear()
+    {
+        unset($this->kaart);
+        $this->kaart = new Kaart('gemeentes', 1860);
+        $filename = substr(__FUNCTION__, 4) . '.png';
+        $reference_image = KAART_REFERENCE_IMAGES_DIR . '/' . $filename;
+        $this->saveFile($filename, $this->kaart->fetch('png'));
+        $result = $this->compareTwoImages(KAART_TESTDIRECTORY . '/' . $filename, $reference_image);
+        $this->assertEquals(0, $result, "check file $filename");
+    }
+
+    public function testGetAllowedYears()
+    {
+        $expected = array(1830, 1860, 1890, 1920, 1940, 1950, 1980);
+        $actual = Kaart::getAllowedYears('provincies');
+        $this->assertEquals($expected, $actual);
+    }
+
 }

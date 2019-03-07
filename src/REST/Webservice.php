@@ -112,10 +112,7 @@ class WebService
                 ) {
                     $additionalpathsfiles[] = 'provinces.json';
                 }
-                if (in_array('dialectareas', $parameters['additionaldata']) || in_array(
-                    'daan_blok_1969',
-                    $parameters['additionaldata']
-                )) {
+                if (in_array('dialectareas', $parameters['additionaldata'])) {
                     $additionalpathsfiles[] = 'dialectareas.json';
                 }
                 $kaart->setAdditionalPathsFiles($additionalpathsfiles);

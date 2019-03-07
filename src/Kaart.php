@@ -33,6 +33,7 @@ require('Kaart.config.inc.php');
 
 class Kaart
 {
+    private $year;
 
     /**
      * @var bool whether area name should be displayed 'onmouseover' on areas
@@ -140,8 +141,10 @@ class Kaart
      * The constructor.
      *
      * @param string $type
+     * @param int $year
+     * @throws \InvalidArgumentException
      */
-    public function __construct($type = 'municipalities')
+    public function __construct($type = 'municipalities', $year = null)
     {
         if (in_array($type, self::$choroplethtypes)) {
             $ini_files = array('default_map_settings.ini');
@@ -155,16 +158,22 @@ class Kaart
                 $this->type = 'municipalities';
             } elseif ($type == 'provincies') {
                 $this->type = 'provinces';
-            } elseif ($type == 'netherlands') {
-                $this->type = 'nederland';
             } else {
                 $this->type = $type;
             }
 
             $ini_files[] = $this->type . '.ini';
 
+            if (!is_null($year) && !file_exists(KAART_COORDSDIR . '/' . $this->type . '_' . $year . '.json')) {
+                throw new \InvalidArgumentException('Year ' . $year . ' not available for map type ' . $this->type);
+            }
+
             if (!isset($paths_file)) {
-                $this->kaart_paths_file = KAART_COORDSDIR . '/' . $this->type . '.json';
+                if (is_null($year)) {
+                    $this->kaart_paths_file = KAART_COORDSDIR . '/' . $this->type . '.json';
+                } else {
+                    $this->kaart_paths_file = KAART_COORDSDIR . '/' .  $this->type . '_' . $year . '.json';
+                }
             } else {
                 $this->kaart_paths_file = $this->getRealPathToPathsFile($paths_file);
             }
@@ -176,6 +185,9 @@ class Kaart
             if (isset($additionalpathsfiles)) {
                 $this->setAdditionalPathsFiles($additionalpathsfiles);
             }
+        } else {
+            throw new \InvalidArgumentException('Unknown map type: ' . $type
+                . ' not one of ' . join(', ', self::$choroplethtypes));
         }
     }
 
@@ -1055,5 +1067,29 @@ class Kaart
     public static function getAllowedFormats()
     {
         return self::$allowedformats;
+    }
+
+    /**
+     *
+     * @param type $maptype
+     * @throws \InvalidArgumentException
+     */
+    public static function getAllowedYears($maptype)
+    {
+        $years = array();
+        if (!in_array($maptype, self::$choroplethtypes)) {
+            throw new \InvalidArgumentException('Unknown map type: ' . $maptype
+                . ' not one of ' . join(', ', self::$choroplethtypes));
+        }
+        if ($maptype == 'provincies') {
+            $maptype = 'provinces';
+        }
+        if ($maptype == 'gemeentes') {
+            $maptype = 'municipalities';
+        }
+        foreach (glob(KAART_COORDSDIR . '/' . $maptype . '_????.json') as $file) {
+            $years[] = intval(substr($file, -9, 4));
+        }
+        return $years;
     }
 }
