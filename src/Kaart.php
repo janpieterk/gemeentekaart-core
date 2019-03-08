@@ -153,7 +153,6 @@ class Kaart
                 $paths_file = 'municipalities.json';
                 $additionalpathsfiles = array('municipalities_flanders.json', 'border_nl_be.json');
             }
-
             if ($type == 'gemeentes') {
                 $this->type = 'municipalities';
             } elseif ($type == 'provincies') {
@@ -161,13 +160,10 @@ class Kaart
             } else {
                 $this->type = $type;
             }
-
             $ini_files[] = $this->type . '.ini';
-
             if (!is_null($year) && !file_exists(KAART_COORDSDIR . '/' . $this->type . '_' . $year . '.json')) {
                 throw new \InvalidArgumentException('Year ' . $year . ' not available for map type ' . $this->type);
             }
-
             if (!isset($paths_file)) {
                 if (is_null($year)) {
                     $this->kaart_paths_file = KAART_COORDSDIR . '/' . $this->type . '.json';
@@ -177,11 +173,9 @@ class Kaart
             } else {
                 $this->kaart_paths_file = $this->getRealPathToPathsFile($paths_file);
             }
-
             foreach ($ini_files as $ini_file) {
                 $this->parseIniFile($ini_file);
             }
-
             if (isset($additionalpathsfiles)) {
                 $this->setAdditionalPathsFiles($additionalpathsfiles);
             }
