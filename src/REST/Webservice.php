@@ -68,11 +68,9 @@ class WebService
      */
     private static function handleParameters($kaart, $parameters)
     {
-
         if (array_key_exists('linkhighlightedonly', $parameters) && $parameters['linkhighlightedonly'] != true) {
             unset($parameters['linkhighlightedonly']);
         }
-
 
         if (array_key_exists('interactive', $parameters) && $parameters['interactive'] == true) {
             $kaart->setInteractive(true);

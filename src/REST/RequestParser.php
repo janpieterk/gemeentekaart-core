@@ -93,6 +93,7 @@ class RequestParser
                 $this->checkParameter('data');
                 $this->checkParameter('possiblemunicipalities');
                 $this->checkParameter('possibleareas'); // can apply to either municipalities, COROP or provinces
+                $this->checkParameter('possibleyears');
                 $this->checkParameter('additionaldata');
                 $this->checkParameter('pathsfile');
                 $this->checkParameter('year');
@@ -166,6 +167,7 @@ class RequestParser
             case 'linkhighlightedonly':
             case 'possiblemunicipalities':
             case 'possibleareas':
+            case 'possibleyears':
             case 'base64':
                 $this->checkBooleanTrue($param);
                 break;
