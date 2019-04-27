@@ -70,8 +70,8 @@ te verkrijgen bij [www.cbs.nl](https://www.cbs.nl), voorafgegaan door `g_` zo da
 
 ## API
 
-#### `__construct(string $type = 'municipalities')`
-Default kaarttype is `municipalities`. Mogelijke kaarttypes zijn: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is een synoniem van `gemeentes`. `provincies` is een synoniem van `provinces`.
+#### `__construct(string $type = 'municipalities', integer $year = NULL)`
+Default kaarttype is `municipalities`. Mogelijke kaarttypes zijn: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is een synoniem van `gemeentes`. `provincies` is een synoniem van `provinces`. Bij weglating van `$year` wordt de default kaart van versie 1.0.X gebruikt, dat wil zeggen de gemeentegrenzen van 2007. Gebruik `Kaart::getAllowedYears(string $maptype)` om de beschikbare jaren voor het gewenste kaarttype te vinden.
 #### Voorbeelden
 ```php
 $kaart = new Kaart(); // zelfde als new Kaart('municipalities');
@@ -302,6 +302,25 @@ print_r($formats);
 //     [4] => svg
 //     [5] => kml
 //     [6] => json
+// )
+```
+---
+#### `array Kaart::getAllowedYears(string $maptype)`
+Geeft een array van mogelijke jaren terug voor het gegeven kaarttype.
+
+#### Voorbeelden
+```php
+$formats = Kaart::getAllowedYears('provinces');
+print_r($formats);
+// Array
+// (
+//    [0] => 1830
+//    [1] => 1860
+//    [2] => 1890
+//    [3] => 1920
+//    [4] => 1940
+//    [5] => 1950
+//    [6] => 1980
 // )
 ```
 

@@ -72,8 +72,8 @@ as values of id attributes in HTML.
 
 ## API
 
-#### `__construct(string $type = 'municipalities')`
-Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`.
+#### `__construct(string $type = 'municipalities', integer $year = NULL)`
+Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0.X is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available year for the given map type.
 #### Examples
 ```php
 $kaart = new Kaart(); // equals new Kaart('municipalities');
@@ -306,6 +306,27 @@ print_r($formats);
 //     [6] => json
 // )
 ```
+
+---
+#### `array Kaart::getAllowedYears(string $maptype)`
+Returns an array of possible years to be used in the constructor for the given maptype.
+
+#### Examples
+```php
+$formats = Kaart::getAllowedYears('provinces');
+print_r($formats);
+// Array
+// (
+//    [0] => 1830
+//    [1] => 1860
+//    [2] => 1890
+//    [3] => 1920
+//    [4] => 1940
+//    [5] => 1950
+//    [6] => 1980
+// )
+```
+
 ---
 ## References
 J. Daan and D.P. Blok (1969). _Van randstad tot landrand. Toelichting bij de kaart: dialecten en naamkunde. Bijdragen en mededelingen der Dialectencommissie van de Koninklijke Nederlandse Akademie van Wetenschappen te Amsterdam 37_, Amsterdam, N.V. Noord-Hollandsche uitgevers maatschappij.
