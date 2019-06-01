@@ -2,9 +2,13 @@
 Deze documentatie in het [Nederlands](README.nl.md).
 ___
 
-PHP library to create choropleth maps of the municipalities of the Netherlands (borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
+PHP library to create choropleth maps of the municipalities of the Netherlands (default: borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
 
-Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders. 
+Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders.
+
+New in version 1.1: the historical municipality and province borders fron the data set [NLGis shapefiles](https://doi.org/10.17026/dans-xb9-t677)
+    by Dr. O.W.A. Boonstra are incorporated in the project. Borders from 1812-1997 area available and can be requested via an optional `year` parameter. Note that no year parameter results in the 2007 maps from version 1.0. Maps from the NLGis data set use _Amsterdam codes_ for municipalities (see Van der Meer &amp; Boonstra 2011) while the version 1.0 maps use CBS codes.
+
 
 Output formats are: SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
 
@@ -54,7 +58,7 @@ Running the PHPUnit tests for gemeentekaart-core:
 
 ## Basic usage
 
-To color the municipality areas of Amsterdam and Rotterdam with red and green,
+To color the municipality areas of Amsterdam and Rotterdam from 2007 with red and green,
 respectively, and create an SVG image:
 
 ```php
@@ -67,7 +71,20 @@ $kaart->show('svg');
 
 The code numbers for the municipalities are the official Dutch municipality codes,
 available at [www.cbs.nl](https://www.cbs.nl), prefixed by `g_` so that they can be used
-as values of id attributes in HTML.
+as values of HTML or XMD id attributes. Possible codes can be requested by calling the `getPossibleMunicipalities()` method on a `Kaart` object created without a `year` parameter.
+
+To color the areas from 1821 of what are today the four "big cities" of the Randstad area:
+
+```php
+$municipalities = array("a_11150" => "#990000", a_10345" => "#990000", "a_11434" => "#990000", "a_10722": "#990000");
+
+$kaart = new Kaart('municipalities', 1821);
+$kaart->addData($municipalities);
+$kaart->show('svg');
+```
+
+The code numbers are  _Amsterdam codes_ from Van der Meer &amp; Boonstra 2011, prefixed by `a_` so that they can be used
+as values of HTML or XMD id attributes. Possible codes can be requested  by calling the `getPossibleMunicipalities()` method on a `Kaart` object created with a `year` parameter.
 
 
 ## API
@@ -78,6 +95,7 @@ Default map type is `municipalities`. Possible map types are: `'municipalities',
 ```php
 $kaart = new Kaart(); // equals new Kaart('municipalities');
 $kaart = new Kaart('provinces');
+$kaart = new Kaart('gemeentes', 1921);
 ```
 
 ---
@@ -119,6 +137,10 @@ $data = array('g_0534' => '#FFC513');
 $kaart->setData($data);
 ```
 
+```php
+$kaart = new Kaart('gemeentes', 1950);
+$kaart->setData(array("a_11150" => "#990000"); // note the Amsterdam code instead of the CBS code
+```
 ---
 #### `setTitle(string $title)`
 Sets the title of the map. Is shown in-picture, above the map.
@@ -248,11 +270,11 @@ For bitmap maps only: returns a string of `<area>` elements for features of the 
 
 ---
 #### `array getPossibleAreas()`
-Returns an associative array (area codes as keys, area names as values) for the current map type.
+Returns an associative array (area codes as keys, area names as values) for the current map object.
 
 ---
 #### `array getPossibleMunicipalities()`
-Synonym for `getPossibleAreas()` on a map of type 'municipalities'/'gemeentes'. 
+Synonym for `getPossibleAreas()` on a map object of type 'municipalities'/'gemeentes'. 
 
 ---
 #### `void show(string $format = 'svg')`
@@ -331,8 +353,11 @@ print_r($formats);
 ## References
 J. Daan and D.P. Blok (1969). _Van randstad tot landrand. Toelichting bij de kaart: dialecten en naamkunde. Bijdragen en mededelingen der Dialectencommissie van de Koninklijke Nederlandse Akademie van Wetenschappen te Amsterdam 37_, Amsterdam, N.V. Noord-Hollandsche uitgevers maatschappij.
 
+Meer, Ad van der  and Onno Boonstra (2011). _Repertorium van Nederlandse gemeenten vanaf 1812, waaraan toegevoegd: de Amsterdamse code_. 2de editie. [Den Haag: DANS.] (DANS Data Guides, 2). [https://dans.knaw.nl/nl/over/organisatie-beleid/publicaties/DANSrepertoriumnederlandsegemeenten2011.pdf](https://dans.knaw.nl/nl/over/organisatie-beleid/publicaties/DANSrepertoriumnederlandsegemeenten2011.pdf)
+
 ## Acknowledgments
 
 * This library is a derivative work of the code from the [Meertens Kaart module](http://www.meertens.knaw.nl/kaart/downloads.html).
 * This library incorporates slightly modified versions of the PEAR packages Image_Color and XML_SVG.
+* This library incorporates the GIS data from: Dr. O.W.A. Boonstra; (2007): NLGis shapefiles. DANS. [https://doi.org/10.17026/dans-xb9-t677](https://doi.org/10.17026/dans-xb9-t677)
 * This library is dedicated to Ilse van Gemert (1979-2018).

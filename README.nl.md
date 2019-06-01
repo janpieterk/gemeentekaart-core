@@ -2,7 +2,7 @@
 This documentation in [English](README.md).
 ___
 
-PHP library om vlakkenkaarten van de Nederlandse gemeentes te maken (gemeentegrenzen van 2007, 443 gemeentes). Gemeentes kunnen ingekleurd worden. Een gebruikelijke use case is om hiermee de relatieve dichtheid van een of ander verschijnsel aan te geven.
+PHP library om vlakkenkaarten van de Nederlandse gemeentes te maken (default: gemeentegrenzen van 2007, 443 gemeentes). Gemeentes kunnen ingekleurd worden. Een gebruikelijke use case is om hiermee de relatieve dichtheid van een of ander verschijnsel aan te geven.
 
 Overige beschikbare data: de gemeentes van Vlaanderen (308 gemeentes), de veertig Nederlandse [COROPgebieden](https://nl.wikipedia.org/wiki/COROP), de twaalf Nederlandse [provincies](https://nl.wikipedia.org/wiki/Provincies_van_Nederland), of de 28 [dialectgebieden](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) uit Daan/Blok (1969) afgebeeld op gemeentegrenzen. 
 

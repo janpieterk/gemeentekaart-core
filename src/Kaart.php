@@ -843,7 +843,6 @@ class Kaart
         }
     }
 
-
     private function getPossibleAreasFromPathsFile()
     {
 

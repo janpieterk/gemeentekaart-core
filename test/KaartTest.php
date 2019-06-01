@@ -1024,7 +1024,6 @@ class KaartTest extends TestCase
     {
         $expected = array(1830, 1860, 1890, 1920, 1940, 1950, 1980);
         $actual = Kaart::getAllowedYears('provincies');
-        print_r($actual);
         $this->assertEquals($expected, $actual);
     }
 
