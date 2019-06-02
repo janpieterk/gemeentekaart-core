@@ -334,8 +334,8 @@ Geeft een array van mogelijke jaren terug voor het gegeven kaarttype.
 
 #### Voorbeelden
 ```php
-$formats = Kaart::getAllowedYears('provinces');
-print_r($formats);
+$years = Kaart::getAllowedYears('provinces');
+print_r($years);
 // Array
 // (
 //    [0] => 1830
@@ -356,7 +356,7 @@ Meer, Ad van der en Onno Boonstra (2011). _Repertorium van Nederlandse gemeenten
 ## Dankwoord
 
 * Deze bibliotheek is een afgeleide van de [Meertens Kaartmodule](http://www.meertens.knaw.nl/kaart/downloads.html).
-* Deze bibliotheen bevat licht aangepaste versies van de PEAR packages Image_Color en XML_SVG.
-* This library incorporates the GIS data from: Dr. O.W.A. Boonstra; (2007): NLGis shapefiles. DANS. [https://doi.org/10.17026/dans-xb9-t677](https://doi.org/10.17026/dans-xb9-t677)
+* Deze bibliotheek bevat licht aangepaste versies van de PEAR packages Image_Color en XML_SVG.
+* Deze bibliotheek maakt gebruik van de GIS data uit: Dr. O.W.A. Boonstra; (2007): NLGis shapefiles. DANS. [https://doi.org/10.17026/dans-xb9-t677](https://doi.org/10.17026/dans-xb9-t677)
 * Deze bibliotheek is opgedragen aan Ilse van Gemert (1979-2018).
 

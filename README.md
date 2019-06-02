@@ -89,7 +89,7 @@ as values of HTML or XMD id attributes. Possible codes for a particular year can
 ## API
 
 #### `__construct(string $type = 'municipalities', integer $year = NULL)`
-Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0 is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available year for the given map type.
+Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0 is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available years for the given map type.
 #### Examples
 ```php
 $kaart = new Kaart(); // equals new Kaart('municipalities');
@@ -334,8 +334,8 @@ Returns an array of possible years to be used in the constructor for the given m
 
 #### Examples
 ```php
-$formats = Kaart::getAllowedYears('provinces');
-print_r($formats);
+$years = Kaart::getAllowedYears('provinces');
+print_r($years);
 // Array
 // (
 //    [0] => 1830
