@@ -19,11 +19,7 @@
 //  with this program; if not, write to the Free Software Foundation, Inc.,
 //  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-/**
- * Include directory for database connection details
- *
- * This should be a path outside the web server's document root
- */
+
 define('KAART_SAFE_INCLUDE_PATH', dirname(__DIR__));
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . KAART_SAFE_INCLUDE_PATH);
 
@@ -40,33 +36,6 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . KAART_DATADIR
  * Include directory for files with coordinates
  */
 define('KAART_COORDSDIR', KAART_SAFE_INCLUDE_PATH . '/coords');
-
-/**
- * JavaScript for SVG maps to show 'onmouseover' placename and Kloeke code of _symbols on the map
- */
-define('KAART_ONMOUSEOVER_ECMASCRIPT', <<<'TAG'
-
-var svgdoc;
-
-function init(event) {
-	svgdoc = event.target.ownerDocument;
-}
-
-function ShowTooltip(txt) {
-	var tttelem;
-	tttelem=svgdoc.getElementById("ttt");
-	tttelem.childNodes.item(0).data = txt;
-	tttelem.setAttribute("display", "inherit");
-}
-
-function HideTooltip() {
-	var tttelem;
-	tttelem=svgdoc.getElementById("ttt");
-	tttelem.childNodes.item(0).data = "";
-}
-
-TAG
-);
 
 /**
  * Should be Truetype font that can be used by the GD Library

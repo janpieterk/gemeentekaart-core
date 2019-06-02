@@ -36,7 +36,7 @@ class RequestParser
     /**
      * @var string $datakey_regexp : regular expression to match municipalities, corop, provinces, dialectareas
      */
-    private $datakey_regexp = '/g_\d|corop_\d|p_\d|dial_\d/';
+    private $datakey_regexp = '/a_\d|g_\d|corop_\d|p_\d|dial_\d/';
     public $error = false;
 
     public function __construct()
@@ -69,15 +69,14 @@ class RequestParser
                     || isset($this->raw_request_array['possibletypes'])
                     || isset($this->raw_request_array['possibleformats']))
             ) {
-
                 if (isset($this->raw_request_array['possiblemunicipalities'])) {
                     $this->checkBooleanTrue('possiblemunicipalities');
+                    $this->checkParameter('year');
                 } elseif (isset($this->raw_request_array['possibletypes'])) {
                     $this->checkBooleanTrue('possibletypes');
                 } elseif (isset($this->raw_request_array['possibleformats'])) {
                     $this->checkBooleanTrue('possibleformats');
                 }
-
             } else {
                 $this->checkParameter('type');
                 $this->checkParameter('format');
@@ -94,8 +93,10 @@ class RequestParser
                 $this->checkParameter('data');
                 $this->checkParameter('possiblemunicipalities');
                 $this->checkParameter('possibleareas'); // can apply to either municipalities, COROP or provinces
+                $this->checkParameter('possibleyears');
                 $this->checkParameter('additionaldata');
                 $this->checkParameter('pathsfile');
+                $this->checkParameter('year');
             }
         }
 
@@ -135,10 +136,8 @@ class RequestParser
                 if (!isset($this->raw_request_array['format'])) {
                     $this->parameters['format'] = 'png';
                 } elseif (!in_array($this->raw_request_array['format'], $this->allowed_formats)) {
-                    $this->errors[] = 'Parameter format ' . $this->raw_request_array['format'] . ' not one of ' . join(
-                            ', ',
-                            $this->allowed_formats
-                        );
+                    $this->errors[] = 'Parameter format ' . $this->raw_request_array['format'] . ' not one of '
+                            . join(', ', $this->allowed_formats);
                 } else {
                     $this->parameters['format'] = $this->raw_request_array['format'];
                 }
@@ -160,6 +159,7 @@ class RequestParser
                 break;
             case 'width':
             case 'height':
+            case 'year':
                 $this->checkInteger($param);
                 break;
             case 'imagemap':
@@ -167,6 +167,7 @@ class RequestParser
             case 'linkhighlightedonly':
             case 'possiblemunicipalities':
             case 'possibleareas':
+            case 'possibleyears':
             case 'base64':
                 $this->checkBooleanTrue($param);
                 break;

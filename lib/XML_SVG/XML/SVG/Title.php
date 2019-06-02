@@ -24,12 +24,18 @@ class XML_SVG_Title extends XML_SVG_Element
     {
         echo '<title';
         $this->printParams('id', 'style');
-        print(">\n");
+        print(">");
         print($this->_title);
         parent::printElement();
         print("</title>\n");
     }
-
+    
+    /**
+     * Method added by Jan Pieter Kunst
+     * @param type $title
+     */
+    function setTitle($title)
+    {
+        $this->_title = $title;
+    }
 }
-
-

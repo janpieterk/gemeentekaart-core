@@ -68,11 +68,9 @@ class WebService
      */
     private static function handleParameters($kaart, $parameters)
     {
-
         if (array_key_exists('linkhighlightedonly', $parameters) && $parameters['linkhighlightedonly'] != true) {
             unset($parameters['linkhighlightedonly']);
         }
-
 
         if (array_key_exists('interactive', $parameters) && $parameters['interactive'] == true) {
             $kaart->setInteractive(true);
@@ -112,10 +110,7 @@ class WebService
                 ) {
                     $additionalpathsfiles[] = 'provinces.json';
                 }
-                if (in_array('dialectareas', $parameters['additionaldata']) || in_array(
-                    'daan_blok_1969',
-                    $parameters['additionaldata']
-                )) {
+                if (in_array('dialectareas', $parameters['additionaldata'])) {
                     $additionalpathsfiles[] = 'dialectareas.json';
                 }
                 $kaart->setAdditionalPathsFiles($additionalpathsfiles);

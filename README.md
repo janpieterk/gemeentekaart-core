@@ -2,9 +2,14 @@
 Deze documentatie in het [Nederlands](README.nl.md).
 ___
 
-PHP library to create choropleth maps of the municipalities of the Netherlands (borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
+PHP library to create choropleth maps of the municipalities of the Netherlands (default: borders as of 2007, 443 municipalities). Areas can be assigned colors, typically to denote the relative frequency of some phenomenon.
 
-Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders. 
+Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders.
+
+### New in version 1.1
+The historical municipality and province borders from the data set [NLGis shapefiles](https://doi.org/10.17026/dans-xb9-t677)
+    by Dr. O.W.A. Boonstra are incorporated in the project. Borders from 1812-1997 are available and can be used via an optional `year` parameter. Note that no `year` parameter results in the borders from 2007 from version 1.0. Maps created from the NLGis data set use _Amsterdam codes_ for municipalities (see Van der Meer & Boonstra 2011) while the version 1.0 maps use CBS codes.
+
 
 Output formats are: SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
 
@@ -35,7 +40,6 @@ To install as a library from [packagist.org](https://packagist.org), leave out t
 }
 ```
 
-
 To install as a project from github using composer:
 
 ```bash
@@ -54,7 +58,7 @@ Running the PHPUnit tests for gemeentekaart-core:
 
 ## Basic usage
 
-To color the municipality areas of Amsterdam and Rotterdam with red and green,
+To color the municipality areas of Amsterdam and Rotterdam from 2007 with red and green,
 respectively, and create an SVG image:
 
 ```php
@@ -67,17 +71,30 @@ $kaart->show('svg');
 
 The code numbers for the municipalities are the official Dutch municipality codes,
 available at [www.cbs.nl](https://www.cbs.nl), prefixed by `g_` so that they can be used
-as values of id attributes in HTML.
+as values of HTML or XMD id attributes. Possible codes can be requested by calling the `getPossibleMunicipalities()` method on a `Kaart` object created without a `year` parameter.
 
+To color the areas from 1821 of what are today the four "big cities" of the Randstad area:
+
+```php
+$municipalities = array("a_11150" => "#990000", a_10345" => "#990000", "a_11434" => "#990000", "a_10722": "#990000");
+
+$kaart = new Kaart('municipalities', 1821);
+$kaart->addData($municipalities);
+$kaart->show('svg');
+```
+
+The code numbers are  _Amsterdam codes_ from Van der Meer &amp; Boonstra 2011, prefixed by `a_` so that they can be used
+as values of HTML or XMD id attributes. Possible codes for a particular year can be requested  by calling the `getPossibleMunicipalities()` method on a `Kaart` object created with a `year` parameter.
 
 ## API
 
-#### `__construct(string $type = 'municipalities')`
-Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`.
+#### `__construct(string $type = 'municipalities', integer $year = NULL)`
+Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0 is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available year for the given map type.
 #### Examples
 ```php
 $kaart = new Kaart(); // equals new Kaart('municipalities');
 $kaart = new Kaart('provinces');
+$kaart = new Kaart('gemeentes', 1921);
 ```
 
 ---
@@ -119,6 +136,10 @@ $data = array('g_0534' => '#FFC513');
 $kaart->setData($data);
 ```
 
+```php
+$kaart = new Kaart('gemeentes', 1950);
+$kaart->setData(array("a_11150" => "#990000"); // note the Amsterdam code instead of the CBS code
+```
 ---
 #### `setTitle(string $title)`
 Sets the title of the map. Is shown in-picture, above the map.
@@ -244,22 +265,22 @@ Returns the title of the map. Empty string if no title has been set.
 
 ---
 #### `string | boolean getImagemap()`
-For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in an `<map>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated. 
+For bitmap maps only: returns a string of `<area>` elements for features of the map, for use in a `<map>` HTML element. Can only be called **after** generating a map with the `show()`, `fetch()` or `saveAsFile()` method! Returns FALSE if no bitmap has been generated. 
 
 ---
 #### `array getPossibleAreas()`
-Returns an associative array (area codes as keys, area names as values) for the current map type.
+Returns an associative array (area codes as keys, area names as values) for the current map object.
 
 ---
 #### `array getPossibleMunicipalities()`
-Synonym for `getPossibleAreas()` on a map of type 'municipalities'/'gemeentes'. 
+Synonym for `getPossibleAreas()` on a map object of type 'municipalities'/'gemeentes'. 
 
 ---
 #### `void show(string $format = 'svg')`
  Hands the map over to a web browser for further handling. Depending on the capabilities and settings of the browser, the map will be shown on a page, handed to another application, or downloaded. Possible formats are: 'svg', 'png', 'gif','jpeg', 'jpg', 'kml', 'json'.
 
 ---
-#### `string|resource fetch(string $format = 'svg')`
+#### `string|blob fetch(string $format = 'svg')`
 Returns the map as a string (SVG, JSON, KML) or binary blob (bitmap image). See `show()` for possible formats. 
 
 ---
@@ -306,12 +327,36 @@ print_r($formats);
 //     [6] => json
 // )
 ```
+
+---
+#### `array Kaart::getAllowedYears(string $maptype)`
+Returns an array of possible years to be used in the constructor for the given maptype.
+
+#### Examples
+```php
+$formats = Kaart::getAllowedYears('provinces');
+print_r($formats);
+// Array
+// (
+//    [0] => 1830
+//    [1] => 1860
+//    [2] => 1890
+//    [3] => 1920
+//    [4] => 1940
+//    [5] => 1950
+//    [6] => 1980
+// )
+```
+
 ---
 ## References
 J. Daan and D.P. Blok (1969). _Van randstad tot landrand. Toelichting bij de kaart: dialecten en naamkunde. Bijdragen en mededelingen der Dialectencommissie van de Koninklijke Nederlandse Akademie van Wetenschappen te Amsterdam 37_, Amsterdam, N.V. Noord-Hollandsche uitgevers maatschappij.
+
+Meer, Ad van der and Onno Boonstra (2011). _Repertorium van Nederlandse gemeenten vanaf 1812, waaraan toegevoegd: de Amsterdamse code_. 2de editie. [Den Haag: DANS.] (DANS Data Guides, 2). [https://dans.knaw.nl/nl/over/organisatie-beleid/publicaties/DANSrepertoriumnederlandsegemeenten2011.pdf](https://dans.knaw.nl/nl/over/organisatie-beleid/publicaties/DANSrepertoriumnederlandsegemeenten2011.pdf)
 
 ## Acknowledgments
 
 * This library is a derivative work of the code from the [Meertens Kaart module](http://www.meertens.knaw.nl/kaart/downloads.html).
 * This library incorporates slightly modified versions of the PEAR packages Image_Color and XML_SVG.
+* This library incorporates the GIS data from: Dr. O.W.A. Boonstra; (2007): NLGis shapefiles. DANS. [https://doi.org/10.17026/dans-xb9-t677](https://doi.org/10.17026/dans-xb9-t677)
 * This library is dedicated to Ilse van Gemert (1979-2018).
