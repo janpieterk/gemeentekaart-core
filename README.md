@@ -6,8 +6,9 @@ PHP library to create choropleth maps of the municipalities of the Netherlands (
 
 Additional available data: the municipalities of Flanders (308 municipalities), the forty [COROP](https://en.wikipedia.org/wiki/COROP) regions of the Netherlands, the twelve [provinces](https://en.wikipedia.org/wiki/Provinces_of_the_Netherlands) of the Netherlands, or the twenty-eight [dialect areas](https://nl.wikipedia.org/wiki/Jo_Daan#/media/File:Dutch-dialects.svg) of Daan/Blok (1969) mapped on municipality borders.
 
-New in version 1.1: the historical municipality and province borders fron the data set [NLGis shapefiles](https://doi.org/10.17026/dans-xb9-t677)
-    by Dr. O.W.A. Boonstra are incorporated in the project. Borders from 1812-1997 area available and can be requested via an optional `year` parameter. Note that no year parameter results in the 2007 maps from version 1.0. Maps from the NLGis data set use _Amsterdam codes_ for municipalities (see Van der Meer &amp; Boonstra 2011) while the version 1.0 maps use CBS codes.
+### New in version 1.1
+The historical municipality and province borders from the data set [NLGis shapefiles](https://doi.org/10.17026/dans-xb9-t677)
+    by Dr. O.W.A. Boonstra are incorporated in the project. Borders from 1812-1997 are available and can be used via an optional `year` parameter. Note that no `year` parameter results in the borders from 2007 from version 1.0. Maps created from the NLGis data set use _Amsterdam codes_ for municipalities (see Van der Meer & Boonstra 2011) while the version 1.0 maps use CBS codes.
 
 
 Output formats are: SVG (default), PNG, GIF, JPEG, KML, GeoJSON.
@@ -38,7 +39,6 @@ To install as a library from [packagist.org](https://packagist.org), leave out t
     }
 }
 ```
-
 
 To install as a project from github using composer:
 
@@ -84,13 +84,12 @@ $kaart->show('svg');
 ```
 
 The code numbers are  _Amsterdam codes_ from Van der Meer &amp; Boonstra 2011, prefixed by `a_` so that they can be used
-as values of HTML or XMD id attributes. Possible codes can be requested  by calling the `getPossibleMunicipalities()` method on a `Kaart` object created with a `year` parameter.
-
+as values of HTML or XMD id attributes. Possible codes for a particular year can be requested  by calling the `getPossibleMunicipalities()` method on a `Kaart` object created with a `year` parameter.
 
 ## API
 
 #### `__construct(string $type = 'municipalities', integer $year = NULL)`
-Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0.X is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available year for the given map type.
+Default map type is `municipalities`. Possible map types are: `'municipalities', 'gemeentes', 'corop','provincies', 'provinces', 'municipalities_nl_flanders', 'municipalities_flanders', 'dialectareas'`. `municipalities` is a synonym for `gemeentes`. `provincies` is a synonym for `provinces`. When `$year` is omitted, the default map for version 1.0 is used, which means the municipality borders of 2007. Use `Kaart::getAllowedYears(string $maptype)` to find the available year for the given map type.
 #### Examples
 ```php
 $kaart = new Kaart(); // equals new Kaart('municipalities');
@@ -281,7 +280,7 @@ Synonym for `getPossibleAreas()` on a map object of type 'municipalities'/'gemee
  Hands the map over to a web browser for further handling. Depending on the capabilities and settings of the browser, the map will be shown on a page, handed to another application, or downloaded. Possible formats are: 'svg', 'png', 'gif','jpeg', 'jpg', 'kml', 'json'.
 
 ---
-#### `string|resource fetch(string $format = 'svg')`
+#### `string|blob fetch(string $format = 'svg')`
 Returns the map as a string (SVG, JSON, KML) or binary blob (bitmap image). See `show()` for possible formats. 
 
 ---
