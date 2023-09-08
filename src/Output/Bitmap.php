@@ -425,7 +425,7 @@ class Bitmap extends Image
             $name = null;
         }
         $thicknessfactor = $map_definitions[$path_type]['bitmap_thickness_factor'];
-        imagesetthickness($this->gd_image, $this->bitmap_linewidth * $thicknessfactor);
+        imagesetthickness($this->gd_image, intval($this->bitmap_linewidth * $thicknessfactor));
         if (array_key_exists(
             'bitmap_color',
             $map_definitions[$path_type]
@@ -448,7 +448,7 @@ class Bitmap extends Image
                 $fill = $this->allocatedColor($highlighted[$path_id]['fill']);
                 $color = $this->allocatedColor($highlighted[$path_id]['outline']);
                 $thicknessfactor = $highlighted[$path_id]['strokewidth'];
-                imagesetthickness($this->gd_image, $this->bitmap_linewidth * $thicknessfactor);
+                imagesetthickness($this->gd_image, intval($this->bitmap_linewidth * $thicknessfactor));
             }
             $highlightedpath = true;
         } else {
@@ -468,10 +468,10 @@ class Bitmap extends Image
             case 'imagepolygon':
                 if (is_array($coords[0])) {
                     foreach ($coords as $lines) {
-                        imagepolygon($this->gd_image, $lines, count($lines) / 2, $color);
+                        imagepolygon($this->gd_image, $lines, $color);
                     }
                 } else {
-                    imagepolygon($this->gd_image, $coords, count($coords) / 2, $color);
+                    imagepolygon($this->gd_image, $coords, $color);
                 }
                 break;
             case 'imagepath':
@@ -486,21 +486,21 @@ class Bitmap extends Image
             case 'imagefilledpolygon':
                 if (is_array($coords[0])) {
                     foreach ($coords as $lines) {
-                        imagefilledpolygon($this->gd_image, $lines, count($lines) / 2, $color);
+                        imagefilledpolygon($this->gd_image, $lines, $color);
                     }
                 } else {
-                    imagefilledpolygon($this->gd_image, $coords, count($coords) / 2, $color);
+                    imagefilledpolygon($this->gd_image, $coords, $color);
                 }
                 break;
             case 'outlinedpolygon':
                 if (is_array($coords[0])) {
                     foreach ($coords as $lines) {
-                        imagefilledpolygon($this->gd_image, $lines, count($lines) / 2, $fill);
-                        imagepolygon($this->gd_image, $lines, count($lines) / 2, $color);
+                        imagefilledpolygon($this->gd_image, $lines, $fill);
+                        imagepolygon($this->gd_image, $lines, $color);
                     }
                 } else {
-                    imagefilledpolygon($this->gd_image, $coords, count($coords) / 2, $fill);
-                    imagepolygon($this->gd_image, $coords, count($coords) / 2, $color);
+                    imagefilledpolygon($this->gd_image, $coords, $fill);
+                    imagepolygon($this->gd_image, $coords, $color);
                 }
                 break;
         }

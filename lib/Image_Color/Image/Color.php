@@ -1,13 +1,10 @@
 <?php
-/** @noinspection PhpUnusedLocalVariableInspection */
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Color.php is the implementation of Image_Color.
  *
  * PHP versions 4 and 5
- * Small modifications for PHP 7 compabibility by Jan Pieter Kunst (2019)
  *
  * This package is released under both the LGPL and PHP licenses.
  *
@@ -40,7 +37,6 @@
  * @license     http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version     CVS: $Id: Color.php 299528 2010-05-20 17:45:25Z drewish $
  * @link        http://pear.php.net/package/Image_Color
- * @note
  */
 
 /**
@@ -93,18 +89,18 @@ class Image_Color
      */
     var $_websafeb = false;
 
-  /**
-   * Mix two colors together by finding their average. If the colors are not
-   * passed as parameters, the class's colors will be mixed instead.
-   *
-   * @param bool $col1 The first color you want to mix
-   * @param bool $col2 The second color you want to mix
-   * @return  string  The mixed color.
-   * @access  public
-   * @author  Jason Lotito <jason@lehighweb.com>
-   * @uses    _setColors() to assign the colors if any are passed to the
-   *                  class.
-   */
+    /**
+     * Mix two colors together by finding their average. If the colors are not
+     * passed as parameters, the class's colors will be mixed instead.
+     *
+     * @param   string  $col1 The first color you want to mix
+     * @param   string  $col2 The second color you want to mix
+     * @return  string  The mixed color.
+     * @access  public
+     * @author  Jason Lotito <jason@lehighweb.com>
+     * @uses    _setColors() to assign the colors if any are passed to the
+     *                  class.
+     */
     function mixColors($col1 = false, $col2 = false)
     {
         if ($col1) {
@@ -211,8 +207,7 @@ class Image_Color
                 array_walk($newcolor, '_makeWebSafe');
             }
 
-          /** @noinspection PhpUndefinedVariableInspection */
-          $allcolors[] = Image_Color::rgb2hex($newcolor);
+            $allcolors[] = Image_Color::rgb2hex($newcolor);
         }
 
         return $allcolors;
@@ -278,7 +273,7 @@ class Image_Color
      * @static
      * @author  Jason Lotito <jason@lehighweb.com>
      */
-    static function getTextColor($color, $light = '#FFFFFF', $dark = '#000000')
+    function getTextColor($color, $light = '#FFFFFF', $dark = '#000000')
     {
         $color = Image_Color::_splitColor($color);
         if ($color[1] > hexdec('66')) {
@@ -326,14 +321,12 @@ class Image_Color
         return $c;
     }
 
-  /**
-   * This is deprecated. Use rgb2hex() instead.
-   * @access  private
-   * @deprecated Function deprecated after 1.0.1
-   * @see     rgb2hex().
-   * @param $color
-   * @return string
-   */
+    /**
+     * This is deprecated. Use rgb2hex() instead.
+     * @access  private
+     * @deprecated Function deprecated after 1.0.1
+     * @see     rgb2hex().
+     */
     function _returnColor ( $color )
     {
         return Image_Color::rgb2hex($color);
@@ -471,7 +464,7 @@ class Image_Color
      *
      * @param   resource        $img Image handle
      * @param   string|array    $color Name or hex string or an RGB array.
-     * @return int|resource
+     * @return  resource        Image color handle.
      * @access  public
      * @static
      * @uses    ImageColorAllocate() to allocate the color.
@@ -501,7 +494,7 @@ class Image_Color
     {
         $c = array();
 
-        if ($color{0} == '#') {
+        if ($color[0] == '#') {
             $c = Image_Color::hex2rgb($color);
         } else {
             $c = Image_Color::namedColor2RGB($color);
@@ -687,7 +680,7 @@ class Image_Color
      * @access  public
      * @static
      */
-    static function percentageColor2RGB($color)
+    function percentageColor2RGB($color)
     {
         // remove spaces
         $color = str_replace(' ', '', $color);
@@ -744,4 +737,4 @@ function _makeWebSafe(&$color)
 }
 // }}}
 
-
+?>

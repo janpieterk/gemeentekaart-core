@@ -34,12 +34,12 @@ class KaartTest extends TestCase
     /** @var $kaart Kaart */
     private $kaart; // contains the object handle of the Kaart class
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->kaart = new Kaart('gemeentes');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->kaart);
     }
