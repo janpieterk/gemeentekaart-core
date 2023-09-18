@@ -24,7 +24,7 @@ namespace JanPieterK\GemeenteKaart\REST;
 
 use JanPieterK\GemeenteKaart\Kaart;
 
-class WebService
+class Webservice
 {
 
     public static function createMap($kaart, $type, $parameters)
